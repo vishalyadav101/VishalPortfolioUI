@@ -1,0 +1,328 @@
+<div class="skills-page">
+  <!-- =====================================================
+       NAVBAR
+  ====================================================== -->
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  @if (isLoading()) {
+    <section class="skills-loading">
+      <div class="loading-spinner"></div>
+
+      <p>Loading skills...</p>
+    </section>
+  }
+
+  @if (!isLoading()) {
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="skills-hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <span class="section-label"> MY SKILLS </span>
+
+          <h1>
+            Technologies I
+
+            <span> Work With </span>
+          </h1>
+
+          <p>
+            A collection of technologies, tools and frameworks I use to build modern, secure and
+            scalable web applications.
+          </p>
+        </div>
+
+        <!-- HERO VISUAL -->
+
+        <div class="skills-visual">
+          <div class="skills-orbit orbit-one"></div>
+
+          <div class="skills-orbit orbit-two"></div>
+
+          <div class="skills-center">
+            <i class="bi bi-braces"></i>
+
+            <strong> FULL STACK </strong>
+
+            <span> DEVELOPER </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         STATS
+    ==================================================== -->
+
+    <section class="skills-stats">
+      <div class="stats-container">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-code-square"></i>
+          </div>
+
+          <div>
+            <strong> {{ totalSkills }}+ </strong>
+
+            <span> Skills </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-collection"></i>
+          </div>
+
+          <div>
+            <strong> {{ totalCategories }}+ </strong>
+
+            <span> Categories </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-layers"></i>
+          </div>
+
+          <div>
+            <strong> Full Stack </strong>
+
+            <span> Development </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-database-check"></i>
+          </div>
+
+          <div>
+            <strong> {{ customIconCount }}+ </strong>
+
+            <span> Custom Icons </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         SKILLS CONTENT
+    ==================================================== -->
+
+    <main class="skills-content">
+      <div class="skills-container">
+        <!-- TOOLBAR -->
+
+        <div class="skills-toolbar">
+          <!-- CATEGORY BUTTONS -->
+
+          <div class="category-buttons">
+            <button
+              type="button"
+              class="category-button"
+              [class.active]="selectedCategory() === 'all'"
+              (click)="setCategory('all')"
+            >
+              <i class="bi bi-grid-3x3-gap"></i>
+
+              All Skills
+            </button>
+
+            @for (category of categories; track category) {
+              <button
+                type="button"
+                class="category-button"
+                [class.active]="selectedCategory() === category"
+                (click)="setCategory(category)"
+              >
+                {{ category }}
+              </button>
+            }
+          </div>
+
+          <!-- SEARCH -->
+
+          <div class="search-box">
+            <i class="bi bi-search"></i>
+
+            <input
+              type="text"
+              placeholder="Search skills..."
+              [value]="searchText()"
+              (input)="onSearch($event)"
+            />
+          </div>
+        </div>
+
+        <!-- ERROR -->
+
+        @if (errorMessage()) {
+          <div class="skills-message error">
+            <i class="bi bi-exclamation-circle"></i>
+
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <!-- SKILLS GRID -->
+
+        @if (filteredSkills.length > 0) {
+          <div class="skills-grid">
+            @for (skill of filteredSkills; track skill.skillId) {
+              <article class="skill-card">
+                <!-- ICON -->
+
+                <div class="skill-icon-wrapper">
+                  @if (getSkillIconUrl(skill)) {
+                    <img
+                      [src]="getSkillIconUrl(skill)"
+                      [alt]="skill.skillName + ' icon'"
+                      loading="lazy"
+                      width="52"
+                      height="52"
+                    />
+                  } @else {
+                    <i class="bi bi-code-square"></i>
+                  }
+                </div>
+
+                <!-- NAME -->
+
+                <h2>
+                  {{ skill.skillName }}
+                </h2>
+
+                <!-- CATEGORY -->
+
+                @if (skill.categoryName) {
+                  <span class="skill-category">
+                    {{ skill.categoryName }}
+                  </span>
+                } @else {
+                  <span class="skill-category"> Technology </span>
+                }
+
+                <!-- ORDER -->
+
+                <div class="skill-level">
+                  <span>
+                    {{ skill.displayOrder }}
+                  </span>
+
+                  <div class="level-line">
+                    <div class="level-fill"></div>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <!-- EMPTY -->
+
+          <div class="skills-empty">
+            <div class="empty-icon">
+              <i class="bi bi-search"></i>
+            </div>
+
+            <h3>No Skills Found</h3>
+
+            <p>Try another skill or category.</p>
+          </div>
+        }
+      </div>
+    </main>
+
+    <!-- ===================================================
+         CTA
+    ==================================================== -->
+
+    <section class="skills-cta">
+      <div class="cta-container">
+        <div>
+          <span class="section-label"> LET'S BUILD SOMETHING </span>
+
+          <h2>Have a project in mind?</h2>
+
+          <p>Let's turn your idea into a modern and scalable web application.</p>
+        </div>
+
+        <a routerLink="/contact" class="cta-button">
+          Get In Touch
+
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
+
+    <footer class="main-footer">
+      <div class="footer-container">
+        <!-- BRAND -->
+
+        <div class="footer-brand">
+          <a routerLink="/" class="footer-brand-link">
+            <span class="footer-brand-icon"> &lt;/&gt; </span>
+
+            <span>
+              <strong> Vishal Yadav </strong>
+
+              <small> .NET Full Stack Developer </small>
+            </span>
+          </a>
+
+          <p>
+            Building modern, secure and scalable web applications with ASP.NET Core, Angular and SQL
+            Server.
+          </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+
+          <a routerLink="/"> Home </a>
+
+          <a routerLink="/about"> About </a>
+
+          <a routerLink="/skills"> Skills </a>
+
+          <a routerLink="/projects"> Projects </a>
+
+          <a routerLink="/experience"> Experience </a>
+
+          <a routerLink="/contact"> Contact </a>
+        </div>
+
+        <!-- TECHNOLOGIES -->
+
+        <div class="footer-column">
+          <h3>Technologies</h3>
+
+          <span> ASP.NET Core </span>
+
+          <span> Angular </span>
+
+          <span> SQL Server </span>
+
+          <span> Entity Framework </span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span> © 2026 Vishal Yadav. All Rights Reserved. </span>
+
+        <span> Built with Angular & .NET </span>
+      </div>
+    </footer>
+  }
+</div>

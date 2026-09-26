@@ -1,0 +1,727 @@
+<div class="projects-page">
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-kanban"></i>
+        Projects
+      </h1>
+
+      <p>Manage your portfolio projects and technologies.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      (click)="openAddForm()"
+      [disabled]="isDeleting() || isSaving()"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Add Project
+    </button>
+  </div>
+
+  <!-- =========================
+       SUCCESS MESSAGE
+  ========================== -->
+
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =========================
+       ERROR MESSAGE
+  ========================== -->
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =========================
+       ADD / EDIT FORM
+  ========================== -->
+
+  @if (showForm()) {
+    <div class="project-form-card">
+      <!-- Form Header -->
+
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Project
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Project
+            }
+          </h2>
+
+          <p>Enter project details, image and technologies.</p>
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          title="Close"
+          (click)="closeForm()"
+          [disabled]="isSaving()"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- =========================
+               PROJECT NAME
+          ========================== -->
+
+          <div class="form-group">
+            <label for="projectName">
+              Project Name
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="projectName"
+              type="text"
+              class="form-control"
+              formControlName="projectName"
+              placeholder="Enter project name"
+            />
+
+            @if (
+              projectForm.controls.projectName.touched && projectForm.controls.projectName.invalid
+            ) {
+              <small class="text-danger"> Project name is required. </small>
+            }
+          </div>
+
+          <!-- =========================
+               DISPLAY ORDER
+          ========================== -->
+
+          <div class="form-group">
+            <label for="displayOrder">
+              Display Order
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              min="1"
+              class="form-control"
+              formControlName="displayOrder"
+            />
+
+            @if (
+              projectForm.controls.displayOrder.touched && projectForm.controls.displayOrder.invalid
+            ) {
+              <small class="text-danger"> Display order must be at least 1. </small>
+            }
+          </div>
+
+          <!-- =========================
+               SHORT DESCRIPTION
+          ========================== -->
+
+          <div class="form-group full-width">
+            <label for="shortDescription">
+              Short Description
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="shortDescription"
+              type="text"
+              class="form-control"
+              formControlName="shortDescription"
+              placeholder="Short project description"
+            />
+
+            @if (
+              projectForm.controls.shortDescription.touched &&
+              projectForm.controls.shortDescription.invalid
+            ) {
+              <small class="text-danger"> Short description is required. </small>
+            }
+          </div>
+
+          <!-- =========================
+               DESCRIPTION
+          ========================== -->
+
+          <div class="form-group full-width">
+            <label for="description"> Description </label>
+
+            <textarea
+              id="description"
+              rows="5"
+              class="form-control"
+              formControlName="description"
+              placeholder="Enter complete project description"
+            ></textarea>
+          </div>
+
+          <!-- =========================
+               GITHUB URL
+          ========================== -->
+
+          <div class="form-group">
+            <label for="githubUrl"> GitHub URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-github"></i>
+
+              <input
+                id="githubUrl"
+                type="url"
+                class="form-control"
+                formControlName="githubUrl"
+                placeholder="https://github.com/..."
+              />
+            </div>
+          </div>
+
+          <!-- =========================
+               LIVE DEMO URL
+          ========================== -->
+
+          <div class="form-group">
+            <label for="liveDemoUrl"> Live Demo URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-box-arrow-up-right"></i>
+
+              <input
+                id="liveDemoUrl"
+                type="url"
+                class="form-control"
+                formControlName="liveDemoUrl"
+                placeholder="https://..."
+              />
+            </div>
+          </div>
+
+          <!-- =========================
+               PROJECT IMAGE
+          ========================== -->
+
+          <div class="form-group full-width">
+            <label for="projectImage">
+              Project Image
+
+              <span class="required">*</span>
+            </label>
+
+            <div class="project-image-upload">
+              <!-- Image Preview -->
+
+              <div class="image-preview">
+                @if (imagePreviewUrl) {
+                  <img
+                    [src]="imagePreviewUrl"
+                    [alt]="projectForm.controls.projectName.value || 'Project image'"
+                  />
+                } @else {
+                  <div class="image-placeholder">
+                    <i class="bi bi-image"></i>
+
+                    <span> No image selected </span>
+                  </div>
+                }
+              </div>
+
+              <!-- File Input -->
+
+              <div class="image-upload-content">
+                <label for="projectImage" class="btn btn-outline-primary image-select-btn">
+                  <i class="bi bi-upload"></i>
+
+                  Choose Image
+                </label>
+
+                <input
+                  id="projectImage"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.webp"
+                  hidden
+                  (change)="onImageSelected($event)"
+                />
+
+                @if (selectedImage) {
+                  <div class="selected-file">
+                    <i class="bi bi-file-earmark-image"></i>
+
+                    <span>
+                      {{ selectedImage.name }}
+                    </span>
+                  </div>
+                } @else if (isEditMode() && imagePreviewUrl) {
+                  <div class="selected-file existing">
+                    <i class="bi bi-check-circle"></i>
+
+                    <span> Existing image </span>
+                  </div>
+                } @else {
+                  <small class="field-hint">
+                    JPG, JPEG, PNG or WEBP
+                    <br />
+                    Maximum size: 5 MB
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================
+               FEATURED
+          ========================== -->
+
+          <div class="form-group">
+            <label> Featured Project </label>
+
+            <div class="active-toggle">
+              <input
+                id="isFeatured"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isFeatured"
+              />
+
+              <label for="isFeatured"> Show as featured project </label>
+            </div>
+          </div>
+
+          <!-- =========================
+               ACTIVE
+          ========================== -->
+
+          <div class="form-group">
+            <label> Status </label>
+
+            <div class="active-toggle">
+              <input
+                id="isActive"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isActive"
+              />
+
+              <label for="isActive"> Project is active </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================
+             TECHNOLOGIES
+        ========================== -->
+
+        <div class="technologies-section">
+          <div class="section-header">
+            <div>
+              <h3>
+                <i class="bi bi-code-slash"></i>
+
+                Technologies
+              </h3>
+
+              <p>Add technologies used in this project.</p>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-outline-primary add-tech-btn"
+              (click)="addTechnology()"
+              [disabled]="isSaving()"
+            >
+              <i class="bi bi-plus-lg"></i>
+
+              Add Technology
+            </button>
+          </div>
+
+          <!-- Technology Form Array -->
+
+          <div formArrayName="technologies" class="technologies-list">
+            @if (technologies.length === 0) {
+              <div class="technology-empty">
+                <i class="bi bi-code-square"></i>
+
+                <p>No technologies added yet.</p>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="addTechnology()"
+                >
+                  Add Technology
+                </button>
+              </div>
+            }
+
+            @for (technology of technologies.controls; track $index; let i = $index) {
+              <div class="technology-row" [formGroupName]="i">
+                <!-- Number -->
+
+                <div class="technology-number">
+                  {{ i + 1 }}
+                </div>
+
+                <!-- Technology Name -->
+
+                <div class="technology-name">
+                  <label> Technology </label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="technologyName"
+                    placeholder="e.g. ASP.NET Core"
+                  />
+
+                  @if (
+                    technology.get('technologyName')?.touched &&
+                    technology.get('technologyName')?.invalid
+                  ) {
+                    <small class="text-danger"> Technology name is required. </small>
+                  }
+                </div>
+
+                <!-- Display Order -->
+
+                <div class="technology-order">
+                  <label> Order </label>
+
+                  <input
+                    type="number"
+                    min="1"
+                    class="form-control"
+                    formControlName="displayOrder"
+                  />
+                </div>
+
+                <!-- Active -->
+
+                <div class="technology-status">
+                  <label> Active </label>
+
+                  <div class="technology-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [id]="'technologyActive' + i"
+                      formControlName="isActive"
+                    />
+
+                    <label [for]="'technologyActive' + i"> Yes </label>
+                  </div>
+                </div>
+
+                <!-- Remove -->
+
+                <div class="technology-remove">
+                  <label> &nbsp; </label>
+
+                  <button
+                    type="button"
+                    class="action-btn delete"
+                    title="Remove Technology"
+                    (click)="removeTechnology(i)"
+                    [disabled]="isSaving()"
+                  >
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- =========================
+             FORM ACTIONS
+        ========================== -->
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-light cancel-btn"
+            (click)="closeForm()"
+            [disabled]="isSaving()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || projectForm.invalid"
+          >
+            @if (isUploadingImage()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              Uploading Image...
+            } @else if (isSaving()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+
+                Update Project
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+
+                Add Project
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- =========================
+       PROJECT LIST
+  ========================== -->
+
+  <div class="projects-card">
+    <!-- List Header -->
+
+    <div class="list-header">
+      <div>
+        <h2>All Projects</h2>
+
+        <p>Manage your portfolio projects.</p>
+      </div>
+
+      <!-- Search -->
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search projects..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Loading... </span>
+        </div>
+
+        <p>Loading projects...</p>
+      </div>
+    }
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+
+    @if (!isLoading() && filteredProjects.length > 0) {
+      <div class="table-wrapper">
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Project</th>
+
+              <th>Technologies</th>
+
+              <th>Order</th>
+
+              <th>Featured</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (project of filteredProjects; track project.projectId) {
+              <tr>
+                <!-- ID -->
+
+                <td class="id-cell">#{{ project.projectId }}</td>
+
+                <!-- Project -->
+
+                <td>
+                  <div class="project-info">
+                    <div class="project-image">
+                      @if (project.imageUrl) {
+                        <img [src]="getImageUrl(project.imageUrl)" [alt]="project.projectName" />
+                      } @else {
+                        <i class="bi bi-kanban"></i>
+                      }
+                    </div>
+
+                    <div class="project-details">
+                      <strong>
+                        {{ project.projectName }}
+                      </strong>
+
+                      <span>
+                        {{ project.shortDescription }}
+                      </span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Technologies -->
+
+                <td>
+                  <div class="technology-badges">
+                    @for (
+                      technology of project.technologies;
+                      track technology.projectTechnologyId
+                    ) {
+                      <span class="technology-badge">
+                        {{ technology.technologyName }}
+                      </span>
+                    }
+
+                    @if (!project.technologies || project.technologies.length === 0) {
+                      <span class="muted"> No technologies </span>
+                    }
+                  </div>
+                </td>
+
+                <!-- Order -->
+
+                <td>
+                  <span class="order-badge">
+                    {{ project.displayOrder }}
+                  </span>
+                </td>
+
+                <!-- Featured -->
+
+                <td>
+                  @if (project.isFeatured) {
+                    <span class="featured-badge">
+                      <i class="bi bi-star-fill"></i>
+
+                      Featured
+                    </span>
+                  } @else {
+                    <span class="not-featured"> No </span>
+                  }
+                </td>
+
+                <!-- Status -->
+
+                <td>
+                  @if (project.isActive) {
+                    <span class="status active">
+                      <span></span>
+
+                      Active
+                    </span>
+                  } @else {
+                    <span class="status inactive">
+                      <span></span>
+
+                      Inactive
+                    </span>
+                  }
+                </td>
+
+                <!-- Actions -->
+
+                <td>
+                  <div class="action-buttons">
+                    <!-- Edit -->
+
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Project"
+                      (click)="openEditForm(project)"
+                      [disabled]="isDeleting() || isSaving()"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- Delete -->
+
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Project"
+                      (click)="deleteProject(project)"
+                      [disabled]="isDeleting() || isSaving()"
+                    >
+                      @if (isDeleting()) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      } @else {
+                        <i class="bi bi-trash3"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- =========================
+         EMPTY SEARCH / EMPTY LIST
+    ========================== -->
+
+    @if (!isLoading() && filteredProjects.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-kanban"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No projects found</h3>
+
+          <p>No project matches "{{ searchText() }}".</p>
+        } @else {
+          <h3>No projects yet</h3>
+
+          <p>Start by adding your first portfolio project.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+
+            Add Project
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

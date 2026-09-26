@@ -1,0 +1,417 @@
+<div class="social-links-page">
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-share"></i>
+        Social Links
+      </h1>
+
+      <p>Manage your social media and professional profile links.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      (click)="openAddForm()"
+      [disabled]="isDeleting()"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Add Social Link
+    </button>
+  </div>
+
+  <!-- SUCCESS MESSAGE -->
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- ERROR MESSAGE -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- ADD / EDIT FORM -->
+  @if (showForm()) {
+    <div class="social-link-form-card">
+      <!-- FORM HEADER -->
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Social Link
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Social Link
+            }
+          </h2>
+
+          <p>Enter the platform and profile URL details.</p>
+        </div>
+
+        <button type="button" class="close-btn" title="Close" (click)="closeForm()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- FORM -->
+      <form [formGroup]="socialLinkForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- PLATFORM NAME -->
+          <div class="form-group">
+            <label for="platformName">
+              Platform Name
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="platformName"
+              type="text"
+              class="form-control"
+              formControlName="platformName"
+              placeholder="e.g. GitHub"
+            />
+
+            @if (
+              socialLinkForm.controls.platformName.touched &&
+              socialLinkForm.controls.platformName.invalid
+            ) {
+              <small class="text-danger"> Platform name is required. </small>
+            }
+          </div>
+
+          <!-- ICON -->
+          <div class="form-group">
+            <label for="icon"> Icon </label>
+
+            <div class="input-icon">
+              <i class="bi bi-bootstrap"></i>
+
+              <input
+                id="icon"
+                type="text"
+                class="form-control"
+                formControlName="icon"
+                placeholder="e.g. github, linkedin"
+              />
+            </div>
+
+            <small class="field-hint"> Enter the Bootstrap icon/platform identifier. </small>
+          </div>
+
+          <!-- URL -->
+          <div class="form-group full-width">
+            <label for="url">
+              Profile URL
+
+              <span class="required"> * </span>
+            </label>
+
+            <div class="input-icon">
+              <i class="bi bi-link-45deg"></i>
+
+              <input
+                id="url"
+                type="url"
+                class="form-control"
+                formControlName="url"
+                placeholder="https://github.com/username"
+              />
+            </div>
+
+            @if (socialLinkForm.controls.url.touched && socialLinkForm.controls.url.invalid) {
+              <small class="text-danger"> Profile URL is required. </small>
+            }
+          </div>
+
+          <!-- DISPLAY ORDER -->
+          <div class="form-group">
+            <label for="displayOrder">
+              Display Order
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              min="1"
+              class="form-control"
+              formControlName="displayOrder"
+            />
+
+            @if (
+              socialLinkForm.controls.displayOrder.touched &&
+              socialLinkForm.controls.displayOrder.invalid
+            ) {
+              <small class="text-danger"> Display order must be at least 1. </small>
+            }
+          </div>
+
+          <!-- ACTIVE STATUS -->
+          <div class="form-group">
+            <label> Status </label>
+
+            <div class="active-toggle">
+              <input
+                id="isActive"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isActive"
+              />
+
+              <label for="isActive"> Social link is active </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM ACTIONS -->
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-light cancel-btn"
+            (click)="closeForm()"
+            [disabled]="isSaving()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || socialLinkForm.invalid"
+          >
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+                Update Social Link
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+                Add Social Link
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- SOCIAL LINKS LIST -->
+  <div class="social-links-card">
+    <!-- LIST HEADER -->
+    <div class="list-header">
+      <div>
+        <h2>All Social Links</h2>
+
+        <p>Manage your public social and professional profiles.</p>
+      </div>
+
+      <!-- SEARCH -->
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search social link..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Loading... </span>
+        </div>
+
+        <p>Loading social links...</p>
+      </div>
+    }
+
+    <!-- TABLE -->
+    @if (!isLoading() && filteredSocialLinks.length > 0) {
+      <div class="table-wrapper">
+        <table class="social-links-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Platform</th>
+
+              <th>URL</th>
+
+              <th>Icon</th>
+
+              <th>Order</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (socialLink of filteredSocialLinks; track socialLink.socialLinkId) {
+              <tr>
+                <!-- ID -->
+                <td class="id-cell">#{{ socialLink.socialLinkId }}</td>
+
+                <!-- PLATFORM -->
+                <td>
+                  <div class="platform-info">
+                    <div class="platform-icon">
+                      @if (socialLink.icon) {
+                        <i class="bi" [ngClass]="'bi-' + socialLink.icon"></i>
+                      } @else {
+                        <i class="bi bi-share"></i>
+                      }
+                    </div>
+
+                    <div class="platform-details">
+                      <strong>
+                        {{ socialLink.platformName }}
+                      </strong>
+
+                      <span> Social Profile </span>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- URL -->
+                <td>
+                  <div class="url-info">
+                    <a
+                      [href]="socialLink.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="social-url"
+                    >
+                      {{ socialLink.url }}
+                    </a>
+
+                    <a
+                      [href]="socialLink.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="open-link"
+                      title="Open Profile"
+                    >
+                      <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                  </div>
+                </td>
+
+                <!-- ICON -->
+                <td>
+                  @if (socialLink.icon) {
+                    <span class="icon-badge">
+                      <i class="bi" [ngClass]="'bi-' + socialLink.icon"></i>
+
+                      {{ socialLink.icon }}
+                    </span>
+                  } @else {
+                    <span class="muted"> — </span>
+                  }
+                </td>
+
+                <!-- ORDER -->
+                <td>
+                  <span class="order-badge">
+                    {{ socialLink.displayOrder }}
+                  </span>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                  @if (socialLink.isActive) {
+                    <span class="status active">
+                      <span></span>
+
+                      Active
+                    </span>
+                  } @else {
+                    <span class="status inactive">
+                      <span></span>
+
+                      Inactive
+                    </span>
+                  }
+                </td>
+
+                <!-- ACTIONS -->
+                <td>
+                  <div class="action-buttons">
+                    <!-- EDIT -->
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Social Link"
+                      (click)="openEditForm(socialLink)"
+                      [disabled]="isDeleting()"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- DELETE -->
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Social Link"
+                      (click)="deleteSocialLink(socialLink)"
+                      [disabled]="isDeleting()"
+                    >
+                      @if (isDeleting()) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      } @else {
+                        <i class="bi bi-trash3"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- EMPTY STATE -->
+    @if (!isLoading() && filteredSocialLinks.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-share"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No social links found</h3>
+
+          <p>No social link matches "{{ searchText() }}".</p>
+        } @else {
+          <h3>No social links yet</h3>
+
+          <p>Start by adding your social or professional profile.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+            Add Social Link
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

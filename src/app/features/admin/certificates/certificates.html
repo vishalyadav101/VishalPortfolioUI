@@ -1,0 +1,572 @@
+<div class="certificates-page">
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-award"></i>
+        Certificates
+      </h1>
+
+      <p>Manage your professional certificates and credentials.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      (click)="openAddForm()"
+      [disabled]="isDeleting()"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Add Certificate
+    </button>
+  </div>
+
+  <!-- =====================================================
+       SUCCESS MESSAGE
+  ====================================================== -->
+
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =====================================================
+       ERROR MESSAGE
+  ====================================================== -->
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =====================================================
+       ADD / EDIT FORM
+  ====================================================== -->
+
+  @if (showForm()) {
+    <div class="certificate-form-card">
+      <!-- FORM HEADER -->
+
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Certificate
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Certificate
+            }
+          </h2>
+
+          <p>Enter your certificate and credential details.</p>
+        </div>
+
+        <button type="button" class="close-btn" title="Close" (click)="closeForm()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- =================================================
+           FORM
+      ================================================== -->
+
+      <form [formGroup]="certificateForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- CERTIFICATE NAME -->
+
+          <div class="form-group">
+            <label for="certificateName">
+              Certificate Name
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="certificateName"
+              type="text"
+              class="form-control"
+              formControlName="certificateName"
+              placeholder="e.g. ASP.NET Core Web API Development"
+            />
+
+            @if (
+              certificateForm.controls.certificateName.touched &&
+              certificateForm.controls.certificateName.invalid
+            ) {
+              <small class="text-danger"> Certificate name is required. </small>
+            }
+          </div>
+
+          <!-- ISSUING ORGANIZATION -->
+
+          <div class="form-group">
+            <label for="issuingOrganization">
+              Issuing Organization
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="issuingOrganization"
+              type="text"
+              class="form-control"
+              formControlName="issuingOrganization"
+              placeholder="e.g. WebRelier Software Solutions Pvt. Ltd."
+            />
+
+            @if (
+              certificateForm.controls.issuingOrganization.touched &&
+              certificateForm.controls.issuingOrganization.invalid
+            ) {
+              <small class="text-danger"> Issuing organization is required. </small>
+            }
+          </div>
+
+          <!-- CREDENTIAL ID -->
+
+          <div class="form-group">
+            <label for="credentialId"> Credential ID </label>
+
+            <input
+              id="credentialId"
+              type="text"
+              class="form-control"
+              formControlName="credentialId"
+              placeholder="e.g. WEBRELIER-DOTNET-001"
+            />
+          </div>
+
+          <!-- ISSUE DATE -->
+
+          <div class="form-group">
+            <label for="issueDate">
+              Issue Date
+
+              <span class="required">*</span>
+            </label>
+
+            <input id="issueDate" type="date" class="form-control" formControlName="issueDate" />
+
+            @if (
+              certificateForm.controls.issueDate.touched &&
+              certificateForm.controls.issueDate.invalid
+            ) {
+              <small class="text-danger"> Issue date is required. </small>
+            }
+          </div>
+
+          <!-- DOES NOT EXPIRE -->
+
+          <div class="form-group">
+            <label> Expiry </label>
+
+            <div class="active-toggle">
+              <input
+                id="doesNotExpire"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="doesNotExpire"
+                (change)="onDoesNotExpireChange($event)"
+              />
+
+              <label for="doesNotExpire"> This certificate does not expire </label>
+            </div>
+          </div>
+
+          <!-- EXPIRY DATE -->
+
+          <div class="form-group">
+            <label for="expiryDate"> Expiry Date </label>
+
+            <input
+              id="expiryDate"
+              type="date"
+              class="form-control"
+              formControlName="expiryDate"
+              [disabled]="certificateForm.controls.doesNotExpire.value"
+            />
+
+            <small class="field-hint"> Leave empty if the certificate does not expire. </small>
+          </div>
+
+          <!-- CREDENTIAL URL -->
+
+          <div class="form-group full-width">
+            <label for="credentialUrl"> Credential URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-link-45deg"></i>
+
+              <input
+                id="credentialUrl"
+                type="url"
+                class="form-control"
+                formControlName="credentialUrl"
+                placeholder="https://example.com/credential"
+              />
+            </div>
+          </div>
+
+          <!-- CERTIFICATE IMAGE URL -->
+
+          <div class="form-group full-width">
+            <label for="certificateImageUrl"> Certificate Image URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-image"></i>
+
+              <input
+                id="certificateImageUrl"
+                type="url"
+                class="form-control"
+                formControlName="certificateImageUrl"
+                placeholder="https://example.com/certificate.jpg"
+              />
+            </div>
+
+            <small class="field-hint"> Enter the public URL of the certificate image. </small>
+          </div>
+
+          <!-- DISPLAY ORDER -->
+
+          <div class="form-group">
+            <label for="displayOrder">
+              Display Order
+
+              <span class="required">*</span>
+            </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              min="1"
+              class="form-control"
+              formControlName="displayOrder"
+            />
+
+            @if (
+              certificateForm.controls.displayOrder.touched &&
+              certificateForm.controls.displayOrder.invalid
+            ) {
+              <small class="text-danger"> Display order must be at least 1. </small>
+            }
+          </div>
+
+          <!-- ACTIVE STATUS -->
+
+          <div class="form-group">
+            <label> Status </label>
+
+            <div class="active-toggle">
+              <input
+                id="isActive"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isActive"
+              />
+
+              <label for="isActive"> Certificate is active </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             FORM ACTIONS
+        ================================================== -->
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-light cancel-btn"
+            (click)="closeForm()"
+            [disabled]="isSaving()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || certificateForm.invalid"
+          >
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+                Update Certificate
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+                Add Certificate
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- =====================================================
+       CERTIFICATE LIST
+  ====================================================== -->
+
+  <div class="certificates-card">
+    <!-- LIST HEADER -->
+
+    <div class="list-header">
+      <div>
+        <h2>All Certificates</h2>
+
+        <p>Manage your professional certifications and credentials.</p>
+      </div>
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search certificate..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- =================================================
+         LOADING
+    ================================================== -->
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Loading... </span>
+        </div>
+
+        <p>Loading certificates...</p>
+      </div>
+    }
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    @if (!isLoading() && filteredCertificates.length > 0) {
+      <div class="table-wrapper">
+        <table class="certificates-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Certificate</th>
+
+              <th>Organization</th>
+
+              <th>Credential</th>
+
+              <th>Issue Date</th>
+
+              <th>Expiry</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (certificate of filteredCertificates; track certificate.certificateId) {
+              <tr>
+                <!-- ID -->
+
+                <td class="id-cell">#{{ certificate.certificateId }}</td>
+
+                <!-- CERTIFICATE -->
+
+                <td>
+                  <div class="certificate-info">
+                    <div class="certificate-icon">
+                      <i class="bi bi-award"></i>
+                    </div>
+
+                    <div class="certificate-details">
+                      <strong>
+                        {{ certificate.certificateName }}
+                      </strong>
+
+                      @if (certificate.certificateImageUrl) {
+                        <a
+                          [href]="certificate.certificateImageUrl"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="certificate-link"
+                        >
+                          <i class="bi bi-image"></i>
+                          View Certificate
+                        </a>
+                      }
+                    </div>
+                  </div>
+                </td>
+
+                <!-- ORGANIZATION -->
+
+                <td>
+                  <div class="organization-info">
+                    <strong>
+                      {{ certificate.issuingOrganization }}
+                    </strong>
+                  </div>
+                </td>
+
+                <!-- CREDENTIAL -->
+
+                <td>
+                  <div class="credential-info">
+                    @if (certificate.credentialId) {
+                      <span class="credential-id">
+                        {{ certificate.credentialId }}
+                      </span>
+                    } @else {
+                      <span class="muted"> — </span>
+                    }
+
+                    @if (certificate.credentialUrl) {
+                      <a
+                        [href]="certificate.credentialUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="credential-link"
+                      >
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        Verify
+                      </a>
+                    }
+                  </div>
+                </td>
+
+                <!-- ISSUE DATE -->
+
+                <td>
+                  <div class="date-info">
+                    {{ certificate.issueDate | date: 'MMM yyyy' }}
+                  </div>
+                </td>
+
+                <!-- EXPIRY -->
+
+                <td>
+                  @if (certificate.doesNotExpire) {
+                    <span class="no-expiry-badge">
+                      <span></span>
+
+                      No Expiry
+                    </span>
+                  } @else if (certificate.expiryDate) {
+                    <span class="expiry-date">
+                      {{ certificate.expiryDate | date: 'MMM yyyy' }}
+                    </span>
+                  } @else {
+                    <span class="muted"> — </span>
+                  }
+                </td>
+
+                <!-- STATUS -->
+
+                <td>
+                  @if (certificate.isActive) {
+                    <span class="status active">
+                      <span></span>
+
+                      Active
+                    </span>
+                  } @else {
+                    <span class="status inactive">
+                      <span></span>
+
+                      Inactive
+                    </span>
+                  }
+                </td>
+
+                <!-- ACTIONS -->
+
+                <td>
+                  <div class="action-buttons">
+                    <!-- EDIT -->
+
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Certificate"
+                      (click)="openEditForm(certificate)"
+                      [disabled]="isDeleting()"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- DELETE -->
+
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Certificate"
+                      (click)="deleteCertificate(certificate)"
+                      [disabled]="isDeleting()"
+                    >
+                      @if (isDeleting()) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      } @else {
+                        <i class="bi bi-trash3"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- =================================================
+         EMPTY STATE
+    ================================================== -->
+
+    @if (!isLoading() && filteredCertificates.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-award"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No certificates found</h3>
+
+          <p>No certificate matches "{{ searchText() }}".</p>
+        } @else {
+          <h3>No certificates yet</h3>
+
+          <p>Start by adding your professional certificate.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+
+            Add Certificate
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

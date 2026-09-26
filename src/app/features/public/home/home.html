@@ -1,0 +1,560 @@
+<div class="home-page">
+  <!-- =====================================================
+       LOADING
+       ====================================================== -->
+
+  @if (isLoading()) {
+    <div class="home-loading">
+      <div class="loading-spinner"></div>
+
+      <p>Loading portfolio...</p>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    <!-- ===================================================
+         HERO
+         ==================================================== -->
+
+    <section class="hero-section">
+      <div class="hero-container">
+        <!-- LEFT -->
+        <div class="hero-content">
+          <p class="hero-greeting">
+            {{ profile?.greeting || 'Hi, I’m' }}
+          </p>
+
+          <h1 class="hero-title">
+            {{ heroFirstName }}
+
+            <span>
+              {{ heroLastName }}
+            </span>
+          </h1>
+
+          <h2 class="hero-headline">
+            {{ profile?.headline || '.NET Full Stack Developer' }}
+          </h2>
+
+          <p class="hero-description">
+            {{
+              profile?.shortDescription ||
+                'I build scalable and modern web applications using ASP.NET Core Web API, Angular and SQL Server.'
+            }}
+          </p>
+
+          <!-- HERO BUTTONS -->
+          <div class="hero-buttons">
+            <a routerLink="/projects" class="primary-button">
+              <i class="bi bi-send-fill"></i>
+
+              <span> View Projects </span>
+
+              <i class="bi bi-arrow-right"></i>
+            </a>
+
+            @if (profile?.resumeUrl) {
+              <a
+                [href]="profile?.resumeUrl"
+                class="secondary-button resume-button"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-download"></i>
+
+                <span> Download Resume </span>
+              </a>
+            }
+          </div>
+
+          <!-- SOCIAL LINKS -->
+          <div class="hero-socials">
+            @if (profile?.gitHubUrl) {
+              <a
+                [href]="profile?.gitHubUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+              >
+                <i class="bi bi-github"></i>
+              </a>
+            }
+
+            @if (profile?.linkedInUrl) {
+              <a
+                [href]="profile?.linkedInUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <i class="bi bi-linkedin"></i>
+              </a>
+            }
+
+            @if (profile?.email) {
+              <a [href]="'mailto:' + profile?.email" aria-label="Email">
+                <i class="bi bi-envelope-fill"></i>
+              </a>
+            }
+
+            @if (profile?.phone) {
+              <a [href]="'tel:' + profile?.phone" aria-label="Phone">
+                <i class="bi bi-telephone-fill"></i>
+              </a>
+            }
+
+            @if (profile?.availabilityStatus || profile?.availabilityMessage) {
+              <div class="mobile-opportunity-card">
+                <div class="mobile-opportunity-title">
+                  <span class="mobile-status-dot"></span>
+
+                  <strong>
+                    {{ profile?.availabilityStatus || 'Open to Opportunities' }}
+                  </strong>
+                </div>
+
+                <p>
+                  {{ profile?.availabilityMessage || 'Let’s build something amazing!' }}
+                </p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="hero-visual">
+          <div class="profile-circle"></div>
+
+          <div class="hero-dots dots-one"></div>
+
+          <div class="hero-dots dots-two"></div>
+
+          @if (profile?.profileImageUrl?.trim()) {
+            <img
+              class="profile-image"
+              [src]="profile?.profileImageUrl"
+              [alt]="profile?.fullName ?? 'Vishal Yadav'"
+            />
+          }
+
+          <div class="code-note">
+            @for (line of codeNoteLines; track line) {
+              <span>
+                {{ line }}
+              </span>
+            }
+
+            <span class="note-arrow"> ↙ </span>
+          </div>
+
+          <div class="opportunity-card">
+            <div class="opportunity-title">
+              <span class="status-dot"></span>
+
+              <strong>
+                {{ profile?.availabilityStatus || 'Open to Opportunities' }}
+              </strong>
+            </div>
+
+            <p>
+              {{ profile?.availabilityMessage || 'Let’s build something amazing!' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         STATS
+         ==================================================== -->
+
+    <section class="stats-section">
+      <div class="stats-container">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-briefcase-fill"></i>
+          </div>
+
+          <div>
+            <strong>
+              {{ experienceValue }}
+            </strong>
+
+            <span>
+              {{ experienceLabel }}
+            </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+
+          <div>
+            <strong> {{ activeProjectsCount }}+ </strong>
+
+            <span> Projects Completed </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-code-slash"></i>
+          </div>
+
+          <div>
+            <strong> {{ activeSkillsCount }}+ </strong>
+
+            <span> Technologies </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+
+          <div>
+            <strong>
+              {{ collaborationStatus }}
+            </strong>
+
+            <span> to Collaborate </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         ABOUT
+         ==================================================== -->
+
+    <section class="about-section">
+      <div class="section-container">
+        <div class="about-grid">
+          <div class="about-content">
+            <span class="section-label">
+              {{ profile?.aboutLabel || 'ABOUT ME' }}
+            </span>
+
+            <h2>
+              {{ profile?.aboutHeading || 'Passionate about' }}
+
+              <br />
+
+              <span>
+                {{ profile?.aboutHighlight || 'Building Real Solutions' }}
+              </span>
+            </h2>
+
+            <p class="about-description">
+              {{
+                profile?.about ||
+                  'I am a Full Stack .NET Developer passionate about building modern, secure and scalable web applications. I love solving real-world problems and continuously learning new technologies.'
+              }}
+            </p>
+
+            <div class="about-details">
+              <div class="detail-item">
+                <i class="bi bi-mortarboard-fill"></i>
+
+                <div>
+                  <strong> Education </strong>
+
+                  <span>
+                    {{ profile?.education || 'BCA Graduate' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <i class="bi bi-gear-fill"></i>
+
+                <div>
+                  <strong> Currently </strong>
+
+                  <span>
+                    {{ currentExperience?.jobTitle || 'Full Stack Developer' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <i class="bi bi-geo-alt-fill"></i>
+
+                <div>
+                  <strong> Location </strong>
+
+                  <span>
+                    {{ profile?.location || 'Pune, Maharashtra, India' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <i class="bi bi-envelope"></i>
+
+                <div>
+                  <strong> Email </strong>
+
+                  <span>
+                    {{ profile?.email || 'your@email.com' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <a routerLink="/about" class="about-button">
+              Know More About Me
+
+              <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="about-visual">
+            @if (profile?.aboutImageUrl?.trim()) {
+              <img
+                class="about-main-image"
+                [src]="profile?.aboutImageUrl"
+                [alt]="profile?.fullName ?? 'About Me'"
+                loading="lazy"
+              />
+            }
+
+            <div class="quote-card">
+              <i class="bi bi-quote"></i>
+
+              <p>
+                {{ profile?.quote || 'Discipline turns ideas into reality.' }}
+              </p>
+
+              <strong>
+                —
+                {{ profile?.quoteAuthor || profile?.fullName || 'Vishal Yadav' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         SKILLS
+         ==================================================== -->
+
+    <section class="skills-section" id="skills">
+      <div class="section-container">
+        <div class="center-heading skills-heading">
+          <span class="section-label"> MY SKILLS </span>
+
+          <h2>
+            Technologies I
+
+            <span> Work With </span>
+          </h2>
+
+          <p>Tools and technologies I use to build modern web applications.</p>
+        </div>
+
+        @if (displaySkills.length > 0) {
+          <div class="skills-grid">
+            @for (skill of displaySkills; track skill.skillId) {
+              <div class="skill-card">
+                <div class="skill-logo">
+                  @if (skill.iconUrl) {
+                    <img
+                      [src]="skill.iconUrl"
+                      [alt]="skill.skillName + ' icon'"
+                      loading="lazy"
+                      width="40"
+                      height="40"
+                    />
+                  } @else if (skill.icon) {
+                    <img
+                      [src]="'https://cdn.simpleicons.org/' + skill.icon"
+                      [alt]="skill.skillName + ' icon'"
+                      loading="lazy"
+                      width="40"
+                      height="40"
+                    />
+                  } @else {
+                    <i class="bi bi-code-square" aria-hidden="true"></i>
+                  }
+                </div>
+
+                <strong>
+                  {{ skill.skillName }}
+                </strong>
+
+                <span>
+                  {{ skill.categoryName }}
+                </span>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="skills-empty">
+            <i class="bi bi-code-square"></i>
+
+            <p>Skills will appear here soon.</p>
+          </div>
+        }
+
+        <div class="section-button skills-button">
+          <a routerLink="/skills" class="outline-button">
+            <span> View All Skills </span>
+
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         FEATURED PROJECTS
+         ==================================================== -->
+
+    <section class="projects-section" id="projects">
+      <div class="section-container">
+        <!-- PROJECT HEADER -->
+        <div class="projects-heading">
+          <div>
+            <span class="section-label"> FEATURED PROJECTS </span>
+
+            <h2>
+              Some of My
+
+              <span> Recent Work </span>
+            </h2>
+          </div>
+
+          <a routerLink="/projects" class="outline-button">
+            View All Projects
+
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+
+        <!-- PROJECT LIST -->
+        @if (displayProjects.length > 0) {
+          <div class="projects-grid">
+            @for (project of displayProjects; track project.projectId) {
+              <article class="project-card">
+                <!-- PROJECT IMAGE -->
+                <div class="project-image-wrapper">
+                  @if (getProjectImageUrl(project.imageUrl)) {
+                    <img
+                      class="project-image"
+                      [src]="getProjectImageUrl(project.imageUrl)"
+                      [alt]="project.projectName"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <div class="project-placeholder">
+                      <i class="bi bi-code-square"></i>
+                    </div>
+                  }
+
+                  <!-- FEATURED BADGE -->
+                  @if (project.isFeatured) {
+                    <span class="featured-badge">
+                      <i class="bi bi-star-fill"></i>
+
+                      Featured
+                    </span>
+                  }
+                </div>
+
+                <!-- PROJECT CONTENT -->
+                <div class="project-content">
+                  <!-- PROJECT NAME -->
+                  <h3>
+                    {{ project.projectName }}
+                  </h3>
+
+                  <!-- SHORT DESCRIPTION -->
+                  <p>
+                    {{ project.shortDescription }}
+                  </p>
+
+                  <!-- TECHNOLOGIES -->
+                  @if (getProjectTechnologies(project).length > 0) {
+                    <div class="technology-tags">
+                      @for (technology of getProjectTechnologies(project); track technology) {
+                        <span>
+                          {{ technology }}
+                        </span>
+                      }
+                    </div>
+                  }
+
+                  <!-- PROJECT LINKS -->
+                  <div class="project-links">
+                    <!-- LIVE DEMO -->
+                    @if (project.liveDemoUrl) {
+                      <a [href]="project.liveDemoUrl" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-box-arrow-up-right"></i>
+
+                        Live Demo
+                      </a>
+                    }
+
+                    <!-- GITHUB -->
+                    @if (project.gitHubUrl) {
+                      <a [href]="project.gitHubUrl" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-github"></i>
+
+                        GitHub
+                      </a>
+                    }
+
+                    <!-- DETAILS -->
+                    <a routerLink="/projects">
+                      <i class="bi bi-file-text"></i>
+
+                      Details
+                    </a>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="projects-empty">
+            <i class="bi bi-folder2-open"></i>
+
+            <p>Projects will appear here soon.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- ===================================================
+         CONTACT CTA
+         ==================================================== -->
+
+    <section class="contact-cta">
+      <div class="cta-container">
+        <div>
+          <span class="section-label"> LET'S CONNECT </span>
+
+          <h2>Have a project in mind?</h2>
+
+          <p>I'm always interested in discussing new projects, ideas and opportunities.</p>
+
+          <a routerLink="/contact" class="primary-button">
+            Get In Touch
+
+            <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         FOOTER
+         ==================================================== -->
+  }
+</div>

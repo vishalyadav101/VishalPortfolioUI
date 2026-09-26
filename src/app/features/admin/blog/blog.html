@@ -1,0 +1,516 @@
+<div class="blog-page">
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-journal-text"></i>
+        Blog Posts
+      </h1>
+
+      <p>Manage your blog articles, content and publishing status.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      (click)="openAddForm()"
+      [disabled]="isDeleting()"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Add Blog Post
+    </button>
+  </div>
+
+  <!-- SUCCESS -->
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- ERROR -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- ADD / EDIT FORM -->
+  @if (showForm()) {
+    <div class="blog-form-card">
+      <!-- FORM HEADER -->
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Blog Post
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Blog Post
+            }
+          </h2>
+
+          <p>Enter your article details and publishing information.</p>
+        </div>
+
+        <button type="button" class="close-btn" title="Close" (click)="closeForm()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- FORM -->
+      <form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- TITLE -->
+          <div class="form-group full-width">
+            <label for="title">
+              Title
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="title"
+              type="text"
+              class="form-control"
+              formControlName="title"
+              placeholder="e.g. ASP.NET Core Web API Best Practices"
+            />
+
+            @if (blogForm.controls.title.touched && blogForm.controls.title.invalid) {
+              <small class="text-danger"> Title is required. </small>
+            }
+          </div>
+
+          <!-- SLUG -->
+          <div class="form-group">
+            <label for="slug">
+              Slug
+
+              <span class="required"> * </span>
+            </label>
+
+            <div class="slug-input">
+              <input
+                id="slug"
+                type="text"
+                class="form-control"
+                formControlName="slug"
+                placeholder="aspnet-core-web-api-best-practices"
+              />
+
+              <button
+                type="button"
+                class="generate-slug-btn"
+                title="Generate slug from title"
+                (click)="generateSlug()"
+              >
+                <i class="bi bi-magic"></i>
+              </button>
+            </div>
+
+            <small class="field-hint"> URL-friendly name used for the blog page. </small>
+
+            @if (blogForm.controls.slug.touched && blogForm.controls.slug.invalid) {
+              <small class="text-danger"> Slug is required. </small>
+            }
+          </div>
+
+          <!-- CATEGORY -->
+          <div class="form-group">
+            <label for="category"> Category </label>
+
+            <input
+              id="category"
+              type="text"
+              class="form-control"
+              formControlName="category"
+              placeholder="e.g. ASP.NET Core"
+            />
+          </div>
+
+          <!-- PUBLISHED DATE -->
+          <div class="form-group">
+            <label for="publishedDate">
+              Published Date
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="publishedDate"
+              type="date"
+              class="form-control"
+              formControlName="publishedDate"
+            />
+
+            @if (
+              blogForm.controls.publishedDate.touched && blogForm.controls.publishedDate.invalid
+            ) {
+              <small class="text-danger"> Published date is required. </small>
+            }
+          </div>
+
+          <!-- DISPLAY ORDER -->
+          <div class="form-group">
+            <label for="displayOrder">
+              Display Order
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              min="1"
+              class="form-control"
+              formControlName="displayOrder"
+            />
+
+            @if (blogForm.controls.displayOrder.touched && blogForm.controls.displayOrder.invalid) {
+              <small class="text-danger"> Display order must be at least 1. </small>
+            }
+          </div>
+
+          <!-- SHORT DESCRIPTION -->
+          <div class="form-group full-width">
+            <label for="shortDescription"> Short Description </label>
+
+            <textarea
+              id="shortDescription"
+              class="form-control textarea"
+              formControlName="shortDescription"
+              rows="3"
+              placeholder="Write a short summary of your article..."
+            ></textarea>
+
+            <small class="field-hint"> Short summary shown in blog cards and previews. </small>
+          </div>
+
+          <!-- CONTENT -->
+          <div class="form-group full-width">
+            <label for="content">
+              Content
+
+              <span class="required"> * </span>
+            </label>
+
+            <textarea
+              id="content"
+              class="form-control content-editor"
+              formControlName="content"
+              rows="10"
+              placeholder="Write your blog article content here..."
+            ></textarea>
+
+            @if (blogForm.controls.content.touched && blogForm.controls.content.invalid) {
+              <small class="text-danger"> Blog content is required. </small>
+            }
+          </div>
+
+          <!-- FEATURED IMAGE -->
+          <div class="form-group full-width">
+            <label for="featuredImageUrl"> Featured Image URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-image"></i>
+
+              <input
+                id="featuredImageUrl"
+                type="url"
+                class="form-control"
+                formControlName="featuredImageUrl"
+                placeholder="https://example.com/blog-image.jpg"
+              />
+            </div>
+
+            <small class="field-hint"> Enter the public URL of the featured image. </small>
+          </div>
+
+          <!-- TAGS -->
+          <div class="form-group full-width">
+            <label for="tags"> Tags </label>
+
+            <div class="input-icon">
+              <i class="bi bi-tags"></i>
+
+              <input
+                id="tags"
+                type="text"
+                class="form-control"
+                formControlName="tags"
+                placeholder=".NET, ASP.NET Core, Web API, EF Core"
+              />
+            </div>
+
+            <small class="field-hint"> Separate multiple tags with commas. </small>
+          </div>
+
+          <!-- PUBLISHED STATUS -->
+          <div class="form-group">
+            <label> Publishing Status </label>
+
+            <div class="active-toggle">
+              <input
+                id="isPublished"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isPublished"
+              />
+
+              <label for="isPublished"> Publish this blog post </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORM ACTIONS -->
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-light cancel-btn"
+            (click)="closeForm()"
+            [disabled]="isSaving()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || blogForm.invalid"
+          >
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+                Update Blog Post
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+                Add Blog Post
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- BLOG LIST -->
+  <div class="blogs-card">
+    <!-- LIST HEADER -->
+    <div class="list-header">
+      <div>
+        <h2>All Blog Posts</h2>
+
+        <p>Manage your articles, categories and publishing status.</p>
+      </div>
+
+      <!-- SEARCH -->
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search blog post..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Loading... </span>
+        </div>
+
+        <p>Loading blog posts...</p>
+      </div>
+    }
+
+    <!-- TABLE -->
+    @if (!isLoading() && filteredBlogs.length > 0) {
+      <div class="table-wrapper">
+        <table class="blogs-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Blog Post</th>
+
+              <th>Category</th>
+
+              <th>Tags</th>
+
+              <th>Published Date</th>
+
+              <th>Status</th>
+
+              <th>Order</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (blog of filteredBlogs; track blog.blogPostId) {
+              <tr>
+                <!-- ID -->
+                <td class="id-cell">#{{ blog.blogPostId }}</td>
+
+                <!-- BLOG POST -->
+                <td>
+                  <div class="blog-info">
+                    <div class="blog-image">
+                      @if (blog.featuredImageUrl) {
+                        <img [src]="blog.featuredImageUrl" [alt]="blog.title" loading="lazy" />
+                      } @else {
+                        <i class="bi bi-journal-text"></i>
+                      }
+                    </div>
+
+                    <div class="blog-details">
+                      <strong>
+                        {{ blog.title }}
+                      </strong>
+
+                      <span class="blog-slug"> /{{ blog.slug }} </span>
+
+                      @if (blog.shortDescription) {
+                        <span class="short-description">
+                          {{ blog.shortDescription }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </td>
+
+                <!-- CATEGORY -->
+                <td>
+                  @if (blog.category) {
+                    <span class="category-badge">
+                      {{ blog.category }}
+                    </span>
+                  } @else {
+                    <span class="muted"> — </span>
+                  }
+                </td>
+
+                <!-- TAGS -->
+                <td>
+                  @if (blog.tags) {
+                    <div class="tags-container">
+                      @for (tag of blog.tags.split(','); track $index) {
+                        <span class="tag-badge">
+                          {{ tag.trim() }}
+                        </span>
+                      }
+                    </div>
+                  } @else {
+                    <span class="muted"> — </span>
+                  }
+                </td>
+
+                <!-- PUBLISHED DATE -->
+                <td>
+                  <div class="date-info">
+                    <i class="bi bi-calendar3"></i>
+
+                    {{ blog.publishedDate | date: 'dd MMM yyyy' }}
+                  </div>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                  @if (blog.isPublished) {
+                    <span class="status published">
+                      <span></span>
+
+                      Published
+                    </span>
+                  } @else {
+                    <span class="status draft">
+                      <span></span>
+
+                      Draft
+                    </span>
+                  }
+                </td>
+
+                <!-- ORDER -->
+                <td>
+                  <span class="order-badge">
+                    {{ blog.displayOrder }}
+                  </span>
+                </td>
+
+                <!-- ACTIONS -->
+                <td>
+                  <div class="action-buttons">
+                    <!-- EDIT -->
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Blog Post"
+                      (click)="openEditForm(blog)"
+                      [disabled]="isDeleting()"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- DELETE -->
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Blog Post"
+                      (click)="deleteBlog(blog)"
+                      [disabled]="isDeleting()"
+                    >
+                      @if (isDeleting()) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                      } @else {
+                        <i class="bi bi-trash3"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- EMPTY STATE -->
+    @if (!isLoading() && filteredBlogs.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-journal-text"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No blog posts found</h3>
+
+          <p>No blog post matches "{{ searchText() }}".</p>
+        } @else {
+          <h3>No blog posts yet</h3>
+
+          <p>Start by adding your first blog article.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+            Add Blog Post
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

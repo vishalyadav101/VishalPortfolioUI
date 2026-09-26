@@ -1,0 +1,1048 @@
+/* =====================================================
+   SKILLS PAGE
+===================================================== */
+
+.skills-page {
+  padding: 30px;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+
+/* =====================================================
+   PAGE HEADER
+===================================================== */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: #2563eb;
+}
+
+.page-header p {
+  margin: 7px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.add-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.add-btn i {
+  margin-right: 7px;
+}
+
+
+/* =====================================================
+   ALERTS
+===================================================== */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   FORM CARD
+===================================================== */
+
+.skill-form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 22px;
+
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =====================================================
+   FORM HEADER
+===================================================== */
+
+.form-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 25px;
+  padding-bottom: 18px;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+.form-card-header h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.form-card-header h2 i {
+  margin-right: 8px;
+  color: #2563eb;
+}
+
+.form-card-header p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.close-btn {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #f1f5f9;
+  color: #64748b;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+
+/* =====================================================
+   FORM GRID
+===================================================== */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 4px;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   INPUT / SELECT
+===================================================== */
+
+.form-control,
+.form-select {
+  width: 100%;
+  min-height: 44px;
+
+  border: 1px solid #dbe1ea;
+  border-radius: 10px;
+
+  padding: 10px 13px;
+
+  color: #1e293b;
+  background: #ffffff;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: #b8c2d1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: #9ca3af;
+}
+
+
+/* =====================================================
+   FIELD HINT
+===================================================== */
+
+.field-hint {
+  display: block;
+  margin-top: 6px;
+
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   ACTIVE TOGGLE
+===================================================== */
+
+.active-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 42px;
+}
+
+.active-toggle .form-check-input {
+  width: 18px;
+  height: 18px;
+
+  margin: 0;
+
+  cursor: pointer;
+}
+
+.active-toggle label {
+  margin: 0;
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   VALIDATION
+===================================================== */
+
+.text-danger {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   FORM ACTIONS
+===================================================== */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  margin-top: 25px;
+  padding-top: 20px;
+
+  border-top: 1px solid #edf0f5;
+}
+
+.form-actions .btn {
+  min-height: 43px;
+  padding: 0 18px;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.save-btn {
+  min-width: 130px;
+}
+
+.cancel-btn {
+  min-width: 90px;
+}
+
+
+/* =====================================================
+   ICON UPLOAD
+===================================================== */
+
+#iconFile {
+  cursor: pointer;
+}
+
+.icon-upload-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-top: 14px;
+}
+
+
+/* Preview box */
+
+.preview-box {
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 10px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background: #f8fafc;
+
+  overflow: hidden;
+}
+
+
+/* Preview image */
+
+.preview-box img {
+  width: 48px;
+  height: 48px;
+
+  max-width: 48px;
+  max-height: 48px;
+
+  object-fit: contain;
+
+  display: block;
+}
+
+
+/* Preview text */
+
+.preview-box span {
+  font-size: 10px;
+  font-weight: 600;
+
+  color: #64748b;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   SKILLS CARD
+===================================================== */
+
+.skills-card {
+  background: #ffffff;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   LIST HEADER
+===================================================== */
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  padding: 24px 25px;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+.list-header h2 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.list-header p {
+  margin: 5px 0 0;
+
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-box {
+  position: relative;
+  width: 300px;
+}
+
+.search-box i {
+  position: absolute;
+
+  left: 13px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+
+  font-size: 14px;
+
+  pointer-events: none;
+}
+
+.search-box input {
+  width: 100%;
+  height: 42px;
+
+  padding: 0 13px 0 38px;
+
+  border: 1px solid #dbe1ea;
+  border-radius: 9px;
+
+  outline: none;
+
+  color: #1e293b;
+  background: #ffffff;
+
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+}
+
+.search-box input:focus {
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-box input::placeholder {
+  color: #9ca3af;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.skills-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 850px;
+
+  table-layout: auto;
+}
+
+.skills-table thead {
+  background: #f8fafc;
+}
+
+.skills-table th {
+  padding: 14px 18px;
+
+  text-align: left;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+
+  white-space: nowrap;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.skills-table td {
+  padding: 15px 18px;
+
+  color: #334155;
+
+  font-size: 14px;
+
+  border-bottom: 1px solid #f0f2f5;
+
+  vertical-align: middle;
+}
+
+.skills-table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.skills-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.skills-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =====================================================
+   ID
+===================================================== */
+
+.id-cell {
+  color: #94a3b8 !important;
+
+  font-size: 12px !important;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   SKILL NAME
+===================================================== */
+
+.skill-name {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 150px;
+}
+
+
+/* =====================================================
+   SKILL ICON CONTAINER
+===================================================== */
+
+.skill-icon {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+  min-height: 42px;
+
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f8fafc;
+  color: #2563eb;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+}
+
+
+/* =====================================================
+   TABLE SKILL ICON
+   IMPORTANT: FIXES LARGE IMAGE ISSUE
+===================================================== */
+
+.skills-table .skill-icon .table-skill-icon {
+  display: block;
+
+  width: 30px !important;
+  height: 30px !important;
+
+  min-width: 30px !important;
+  min-height: 30px !important;
+
+  max-width: 30px !important;
+  max-height: 30px !important;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  flex: 0 0 30px;
+
+  border: none;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+
+/* Uploaded image specifically */
+
+.skills-table .skill-icon img {
+  width: 30px !important;
+  height: 30px !important;
+
+  max-width: 30px !important;
+  max-height: 30px !important;
+
+  object-fit: contain !important;
+
+  display: block !important;
+}
+
+
+/* Fallback icon */
+
+.skill-icon > i {
+  font-size: 19px;
+  line-height: 1;
+}
+
+
+/* Skill name */
+
+.skill-name strong {
+  color: #1e293b;
+  font-size: 14px;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   CATEGORY
+===================================================== */
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 20px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   ICON INFORMATION
+===================================================== */
+
+.icon-info {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 3px;
+
+  max-width: 120px;
+}
+
+.icon-info code {
+  display: inline-block;
+
+  max-width: 120px;
+
+  padding: 4px 7px;
+
+  border-radius: 5px;
+
+  background: #f8fafc;
+  color: #475569;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icon-info small {
+  color: #94a3b8;
+  font-size: 10px;
+
+  white-space: nowrap;
+}
+
+.muted {
+  color: #cbd5e1;
+}
+
+
+/* =====================================================
+   ORDER
+===================================================== */
+
+.order-badge {
+  display: inline-flex;
+
+  width: 28px;
+  height: 28px;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.status > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+}
+
+.status.active {
+  color: #15803d;
+}
+
+.status.active > span {
+  background: #22c55e;
+}
+
+.status.inactive {
+  color: #64748b;
+}
+
+.status.inactive > span {
+  background: #94a3b8;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.action-btn {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 8px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* Edit */
+
+.action-btn.edit {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.action-btn.edit:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+
+/* Delete */
+
+.action-btn.delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.action-btn.delete:hover:not(:disabled) {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading-state {
+  min-height: 320px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-state .spinner-border {
+  width: 35px;
+  height: 35px;
+}
+
+.loading-state p {
+  margin: 14px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-state {
+  min-height: 320px;
+
+  padding: 40px 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  margin-bottom: 15px;
+
+  border-radius: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-size: 25px;
+}
+
+.empty-state h3 {
+  margin: 0;
+
+  color: #1e293b;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.empty-state p {
+  margin: 7px 0 18px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .skills-page {
+    padding: 22px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+
+  .list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .add-btn {
+    width: 100%;
+  }
+
+  .skill-name {
+    min-width: 130px;
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 576px) {
+
+  .skills-page {
+    padding: 15px;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+  .skill-form-card {
+    padding: 18px;
+  }
+
+  .form-card-header h2 {
+    font-size: 17px;
+  }
+
+  .list-header {
+    padding: 18px;
+  }
+
+  .skills-table th,
+  .skills-table td {
+    padding: 12px 14px;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .skill-icon {
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+    min-height: 38px;
+  }
+
+  .skills-table .skill-icon .table-skill-icon,
+  .skills-table .skill-icon img {
+    width: 27px !important;
+    height: 27px !important;
+
+    max-width: 27px !important;
+    max-height: 27px !important;
+  }
+
+}

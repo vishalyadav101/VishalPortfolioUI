@@ -1,0 +1,218 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="bi bi-code-slash"></i>
+      </div>
+
+      <div>
+        <h5>Vishal Portfolio</h5>
+        <small>Admin Panel</small>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/admin/dashboard" class="nav-link active">
+        <i class="bi bi-grid-1x2-fill"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/admin/profile" class="nav-link">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+      </a>
+
+      <a routerLink="/admin/skills" class="nav-link">
+        <i class="bi bi-lightning"></i>
+        <span>Skills</span>
+      </a>
+
+      <a routerLink="/admin/projects" class="nav-link">
+        <i class="bi bi-folder"></i>
+        <span>Projects</span>
+      </a>
+
+      <a routerLink="/admin/experience" class="nav-link">
+        <i class="bi bi-briefcase"></i>
+        <span>Experience</span>
+      </a>
+
+      <a routerLink="/admin/certificates" class="nav-link">
+        <i class="bi bi-award"></i>
+        <span>Certificates</span>
+      </a>
+
+      <a routerLink="/admin/social-links" class="nav-link">
+        <i class="bi bi-share"></i>
+        <span>Social Links</span>
+      </a>
+
+      <a routerLink="/admin/blog" class="nav-link">
+        <i class="bi bi-journal-text"></i>
+        <span>Blog</span>
+      </a>
+
+      <a routerLink="/admin/contacts" class="nav-link">
+        <i class="bi bi-envelope"></i>
+        <span>Contacts</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button type="button" class="logout-btn" (click)="logout()">
+        <i class="bi bi-box-arrow-left"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Navbar -->
+    <header class="topbar">
+      <div>
+        <h4>Dashboard</h4>
+        <p>Welcome back to your portfolio admin panel.</p>
+      </div>
+
+      <div class="user-info">
+        <div class="user-avatar">
+          <i class="bi bi-person-fill"></i>
+        </div>
+
+        <div>
+          <strong>{{ user?.fullName }}</strong>
+          <small>{{ user?.role }}</small>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-content">
+      <!-- Welcome -->
+      <div class="welcome-card">
+        <div>
+          <span class="welcome-label"> Welcome back 👋 </span>
+
+          <h1>Hello, {{ user?.fullName }}</h1>
+
+          <p>Manage your portfolio content from this dashboard.</p>
+        </div>
+
+        <i class="bi bi-bar-chart-line-fill"></i>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <!-- Projects -->
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-folder-fill"></i>
+          </div>
+
+          <div>
+            <span>Projects</span>
+
+            <h3>
+              @if (isLoading) {
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+              } @else {
+                {{ projectCount }}
+              }
+            </h3>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-lightning-fill"></i>
+          </div>
+
+          <div>
+            <span>Skills</span>
+
+            <h3>
+              @if (isLoading) {
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+              } @else {
+                {{ skillCount }}
+              }
+            </h3>
+          </div>
+        </div>
+
+        <!-- Blog Posts -->
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-journal-text"></i>
+          </div>
+
+          <div>
+            <span>Blog Posts</span>
+
+            <h3>
+              @if (isLoading) {
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+              } @else {
+                {{ blogCount }}
+              }
+            </h3>
+          </div>
+        </div>
+
+        <!-- Contacts -->
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-envelope-fill"></i>
+          </div>
+
+          <div>
+            <span>Contacts</span>
+
+            <h3>
+              @if (isLoading) {
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+              } @else {
+                {{ contactCount }}
+              }
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="section-card">
+        <div class="section-header">
+          <div>
+            <h5>Quick Actions</h5>
+            <p>Manage your portfolio quickly.</p>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <a routerLink="/admin/profile" class="action-card">
+            <i class="bi bi-person"></i>
+            <span>Update Profile</span>
+          </a>
+
+          <a routerLink="/admin/projects" class="action-card">
+            <i class="bi bi-folder-plus"></i>
+            <span>Manage Projects</span>
+          </a>
+
+          <a routerLink="/admin/skills" class="action-card">
+            <i class="bi bi-lightning"></i>
+            <span>Manage Skills</span>
+          </a>
+
+          <a routerLink="/admin/blog" class="action-card">
+            <i class="bi bi-pencil-square"></i>
+            <span>Manage Blog</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

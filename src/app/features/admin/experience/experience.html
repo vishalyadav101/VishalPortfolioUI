@@ -1,0 +1,613 @@
+<div class="experience-page">
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-briefcase"></i>
+        Experience
+      </h1>
+
+      <p>Manage your professional experience and career history.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      (click)="openAddForm()"
+      [disabled]="isDeleting()"
+    >
+      <i class="bi bi-plus-lg"></i>
+
+      Add Experience
+    </button>
+  </div>
+
+  <!-- =========================
+       SUCCESS MESSAGE
+  ========================== -->
+
+  @if (successMessage()) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =========================
+       ERROR MESSAGE
+  ========================== -->
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+    </div>
+  }
+
+  <!-- =========================
+       ADD / EDIT FORM
+  ========================== -->
+
+  @if (showForm()) {
+    <div class="experience-form-card">
+      <!-- Form Header -->
+
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Experience
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Experience
+            }
+          </h2>
+
+          <p>Enter your professional experience details.</p>
+        </div>
+
+        <button type="button" class="close-btn" title="Close" (click)="closeForm()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- =========================
+           FORM
+      ========================== -->
+
+      <form [formGroup]="experienceForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- Company Name -->
+
+          <div class="form-group">
+            <label for="companyName">
+              Company Name
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="companyName"
+              type="text"
+              class="form-control"
+              formControlName="companyName"
+              placeholder="e.g. WebRelier Software Solutions Pvt. Ltd."
+            />
+
+            @if (
+              experienceForm.controls.companyName.touched &&
+              experienceForm.controls.companyName.invalid
+            ) {
+              <small class="text-danger"> Company name is required. </small>
+            }
+          </div>
+
+          <!-- Job Title -->
+
+          <div class="form-group">
+            <label for="jobTitle">
+              Job Title
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="jobTitle"
+              type="text"
+              class="form-control"
+              formControlName="jobTitle"
+              placeholder="e.g. .NET Full Stack Developer Intern"
+            />
+
+            @if (
+              experienceForm.controls.jobTitle.touched && experienceForm.controls.jobTitle.invalid
+            ) {
+              <small class="text-danger"> Job title is required. </small>
+            }
+          </div>
+
+          <!-- Employment Type -->
+
+          <div class="form-group">
+            <label for="employmentType"> Employment Type </label>
+
+            <select id="employmentType" class="form-select" formControlName="employmentType">
+              <option value="">Select employment type</option>
+
+              <option value="Internship">Internship</option>
+
+              <option value="Full-time">Full-time</option>
+
+              <option value="Part-time">Part-time</option>
+
+              <option value="Contract">Contract</option>
+
+              <option value="Freelance">Freelance</option>
+            </select>
+          </div>
+
+          <!-- Location -->
+
+          <div class="form-group">
+            <label for="location"> Location </label>
+
+            <input
+              id="location"
+              type="text"
+              class="form-control"
+              formControlName="location"
+              placeholder="e.g. Pune, Maharashtra, India"
+            />
+          </div>
+
+          <!-- Start Date -->
+
+          <div class="form-group">
+            <label for="startDate">
+              Start Date
+
+              <span class="required"> * </span>
+            </label>
+
+            <input id="startDate" type="date" class="form-control" formControlName="startDate" />
+
+            @if (
+              experienceForm.controls.startDate.touched && experienceForm.controls.startDate.invalid
+            ) {
+              <small class="text-danger"> Start date is required. </small>
+            }
+          </div>
+
+          <!-- End Date -->
+
+          <div class="form-group">
+            <label for="endDate"> End Date </label>
+
+            <input
+              id="endDate"
+              type="date"
+              class="form-control"
+              formControlName="endDate"
+              [disabled]="experienceForm.controls.isCurrent.value"
+            />
+
+            <small class="field-hint"> Leave empty if this is your current position. </small>
+          </div>
+
+          <!-- Current Position -->
+
+          <div class="form-group">
+            <label> Current Position </label>
+
+            <div class="active-toggle">
+              <input
+                id="isCurrent"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isCurrent"
+                (change)="onCurrentChange($event)"
+              />
+
+              <label for="isCurrent"> I currently work here </label>
+            </div>
+          </div>
+
+          <!-- Active -->
+
+          <div class="form-group">
+            <label> Status </label>
+
+            <div class="active-toggle">
+              <input
+                id="isActive"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isActive"
+              />
+
+              <label for="isActive"> Experience is active </label>
+            </div>
+          </div>
+
+          <!-- Description -->
+
+          <div class="form-group full-width">
+            <label for="description"> Description </label>
+
+            <textarea
+              id="description"
+              rows="5"
+              class="form-control"
+              formControlName="description"
+              placeholder="Describe your role, responsibilities and achievements..."
+            >
+            </textarea>
+          </div>
+
+          <!-- Technologies -->
+
+          <div class="form-group full-width">
+            <label for="technologies"> Technologies </label>
+
+            <input
+              id="technologies"
+              type="text"
+              class="form-control"
+              formControlName="technologies"
+              placeholder="ASP.NET Core 8, Angular 19+, EF Core, SQL Server, Git, GitHub"
+            />
+
+            <small class="field-hint"> Separate technologies using commas. </small>
+          </div>
+
+          <!-- Company URL -->
+
+          <div class="form-group full-width">
+            <label for="companyUrl"> Company URL </label>
+
+            <div class="input-icon">
+              <i class="bi bi-globe2"></i>
+
+              <input
+                id="companyUrl"
+                type="url"
+                class="form-control"
+                formControlName="companyUrl"
+                placeholder="https://example.com"
+              />
+            </div>
+          </div>
+
+          <!-- Display Order -->
+
+          <div class="form-group">
+            <label for="displayOrder">
+              Display Order
+
+              <span class="required"> * </span>
+            </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              min="1"
+              class="form-control"
+              formControlName="displayOrder"
+            />
+
+            @if (
+              experienceForm.controls.displayOrder.touched &&
+              experienceForm.controls.displayOrder.invalid
+            ) {
+              <small class="text-danger"> Display order must be at least 1. </small>
+            }
+          </div>
+        </div>
+
+        <!-- =========================
+             FORM ACTIONS
+        ========================== -->
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn btn-light cancel-btn"
+            (click)="closeForm()"
+            [disabled]="isSaving()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || experienceForm.invalid"
+          >
+            @if (isSaving()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+
+              Saving...
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+
+                Update Experience
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+
+                Add Experience
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- =========================
+       EXPERIENCE LIST
+  ========================== -->
+
+  <div class="experiences-card">
+    <!-- List Header -->
+
+    <div class="list-header">
+      <div>
+        <h2>All Experiences</h2>
+
+        <p>Manage your professional career history.</p>
+      </div>
+
+      <!-- Search -->
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search experience..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden"> Loading... </span>
+        </div>
+
+        <p>Loading experiences...</p>
+      </div>
+    }
+
+    <!-- =========================
+         TABLE
+    ========================== -->
+
+    @if (!isLoading() && filteredExperiences.length > 0) {
+      <div class="table-wrapper">
+        <table class="experiences-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Company</th>
+
+              <th>Position</th>
+
+              <th>Employment</th>
+
+              <th>Duration</th>
+
+              <th>Technologies</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (experience of filteredExperiences; track experience.experienceId) {
+              <tr>
+                <!-- ID -->
+
+                <td class="id-cell">#{{ experience.experienceId }}</td>
+
+                <!-- Company -->
+
+                <td>
+                  <div class="company-info">
+                    <div class="company-icon">
+                      <i class="bi bi-building"></i>
+                    </div>
+
+                    <div class="company-details">
+                      <strong>
+                        {{ experience.companyName }}
+                      </strong>
+
+                      @if (experience.location) {
+                        <span>
+                          <i class="bi bi-geo-alt"></i>
+
+                          {{ experience.location }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </td>
+
+                <!-- Position -->
+
+                <td>
+                  <div class="position-info">
+                    <strong>
+                      {{ experience.jobTitle }}
+                    </strong>
+
+                    @if (experience.companyUrl) {
+                      <a
+                        [href]="experience.companyUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="company-link"
+                      >
+                        <i class="bi bi-box-arrow-up-right"></i>
+
+                        Company
+                      </a>
+                    }
+                  </div>
+                </td>
+
+                <!-- Employment -->
+
+                <td>
+                  @if (experience.employmentType) {
+                    <span class="employment-badge">
+                      {{ experience.employmentType }}
+                    </span>
+                  } @else {
+                    <span class="muted"> — </span>
+                  }
+                </td>
+
+                <!-- Duration -->
+
+                <td>
+                  <div class="duration-info">
+                    <div>
+                      {{ experience.startDate | date: 'MMM yyyy' }}
+
+                      <span class="duration-arrow"> → </span>
+
+                      @if (experience.isCurrent) {
+                        Present
+                      } @else if (experience.endDate) {
+                        {{ experience.endDate | date: 'MMM yyyy' }}
+                      } @else {
+                        —
+                      }
+                    </div>
+
+                    @if (experience.isCurrent) {
+                      <span class="current-badge">
+                        <span></span>
+
+                        Current
+                      </span>
+                    }
+                  </div>
+                </td>
+
+                <!-- Technologies -->
+
+                <td>
+                  <div class="technology-text">
+                    @if (experience.technologies) {
+                      {{ experience.technologies }}
+                    } @else {
+                      <span class="muted"> — </span>
+                    }
+                  </div>
+                </td>
+
+                <!-- Status -->
+
+                <td>
+                  @if (experience.isActive) {
+                    <span class="status active">
+                      <span></span>
+
+                      Active
+                    </span>
+                  } @else {
+                    <span class="status inactive">
+                      <span></span>
+
+                      Inactive
+                    </span>
+                  }
+                </td>
+
+                <!-- Actions -->
+
+                <td>
+                  <div class="action-buttons">
+                    <!-- Edit -->
+
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Experience"
+                      (click)="openEditForm(experience)"
+                      [disabled]="isDeleting()"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- Delete -->
+
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Experience"
+                      (click)="deleteExperience(experience)"
+                      [disabled]="isDeleting()"
+                    >
+                      @if (isDeleting()) {
+                        <span class="spinner-border spinner-border-sm" aria-hidden="true"> </span>
+                      } @else {
+                        <i class="bi bi-trash3"></i>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- =========================
+         EMPTY STATE
+    ========================== -->
+
+    @if (!isLoading() && filteredExperiences.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-briefcase"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No experiences found</h3>
+
+          <p>No experience matches "{{ searchText() }}".</p>
+        } @else {
+          <h3>No experiences yet</h3>
+
+          <p>Start by adding your professional experience.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+
+            Add Experience
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

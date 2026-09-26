@@ -1,0 +1,168 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+import { ExperienceService } from '../../../core/services/experience';
+import { Experience } from '../../../core/models/experience.model';
+
+@Component({
+  selector: 'app-experience',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './experience.html',
+  styleUrl: './experience.css',
+})
+export class ExperiencePage implements OnInit {
+  private readonly experienceService = inject(ExperienceService);
+
+  experiences: Experience[] = [];
+
+  isLoading = true;
+
+  errorMessage = '';
+
+  ngOnInit(): void {
+    this.loadExperiences();
+  }
+
+  private loadExperiences(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.experienceService.getExperiences().subscribe({
+      next: (response: Experience[]) => {
+        this.experiences = (response || [])
+          .filter((experience: Experience) => experience.isActive !== false)
+          .sort((a: Experience, b: Experience) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+
+        this.isLoading = false;
+      },
+
+      error: (error) => {
+        console.error('Experience API Error:', error);
+
+        this.experiences = [];
+
+        this.errorMessage = 'Unable to load experience details.';
+
+        this.isLoading = false;
+      },
+    });
+  }
+
+  // =====================================================
+  // CURRENT EXPERIENCE
+  // =====================================================
+
+  get currentExperience(): Experience | null {
+    return (
+      this.experiences.find((experience: Experience) => experience.isCurrent === true) ??
+      this.experiences[0] ??
+      null
+    );
+  }
+
+  // =====================================================
+  // EXPERIENCE COUNT
+  // =====================================================
+
+  get experienceCount(): number {
+    return this.experiences.length;
+  }
+
+  // =====================================================
+  // DATE FORMAT
+  // =====================================================
+
+  formatDate(date: string | null | undefined): string {
+    if (!date) {
+      return '';
+    }
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return '';
+    }
+
+    return parsedDate.toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  // =====================================================
+  // DATE RANGE
+  // =====================================================
+
+  getDateRange(experience: Experience): string {
+    const start = this.formatDate(experience.startDate);
+
+    if (experience.isCurrent) {
+      return `${start} - Present`;
+    }
+
+    const end = this.formatDate(experience.endDate);
+
+    return end ? `${start} - ${end}` : start;
+  }
+
+  // =====================================================
+  // TECHNOLOGIES
+  // =====================================================
+
+  getTechnologies(experience: Experience): string[] {
+    const data = experience as any;
+
+    const technologies = data.technologies;
+
+    if (Array.isArray(technologies)) {
+      return technologies
+        .map((technology: any) => {
+          if (typeof technology === 'string') {
+            return technology.trim();
+          }
+
+          return (technology?.technologyName || technology?.name || '').trim();
+        })
+        .filter((technology: string) => !!technology);
+    }
+
+    if (typeof technologies === 'string') {
+      return technologies
+        .split(',')
+        .map((technology: string) => technology.trim())
+        .filter((technology: string) => !!technology);
+    }
+
+    return [];
+  }
+
+  // =====================================================
+  // COMPANY URL
+  // =====================================================
+
+  getCompanyUrl(experience: Experience): string | null {
+    const data = experience as any;
+
+    const url = data.companyUrl;
+
+    if (!url) {
+      return null;
+    }
+
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+
+    return `https://${url}`;
+  }
+
+  // =====================================================
+  // TRACK BY
+  // =====================================================
+
+  trackByExperience(index: number, experience: Experience): number {
+    return experience.experienceId ?? index;
+  }
+}

@@ -1,0 +1,376 @@
+<div class="contacts-page">
+  <!-- ==========================================
+       PAGE HEADER
+  =========================================== -->
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-envelope-paper"></i>
+        Contacts
+      </h1>
+
+      <p>Manage messages received from your portfolio visitors.</p>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="stat-value">
+          {{ contacts.length }}
+        </span>
+
+        <span class="stat-label"> Total </span>
+      </div>
+
+      <div class="stat-item unread">
+        <span class="stat-value">
+          {{ getUnreadCount() }}
+        </span>
+
+        <span class="stat-label"> Unread </span>
+      </div>
+
+      <div class="stat-item read">
+        <span class="stat-value">
+          {{ getReadCount() }}
+        </span>
+
+        <span class="stat-label"> Read </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SUCCESS MESSAGE
+  =========================================== -->
+  @if (successMessage()) {
+    <div class="alert-message success">
+      <i class="bi bi-check-circle-fill"></i>
+
+      <span>
+        {{ successMessage() }}
+      </span>
+
+      <button type="button" (click)="successMessage.set('')">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+  }
+
+  <!-- ==========================================
+       ERROR MESSAGE
+  =========================================== -->
+  @if (errorMessage()) {
+    <div class="alert-message error">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      <span>
+        {{ errorMessage() }}
+      </span>
+
+      <button type="button" (click)="errorMessage.set('')">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+  }
+
+  <!-- ==========================================
+       CONTACT LIST
+  =========================================== -->
+  <div class="contacts-card">
+    <div class="list-header">
+      <div class="list-title">
+        <h2>
+          <i class="bi bi-chat-left-text"></i>
+          Messages
+        </h2>
+
+        <span class="count-badge">
+          {{ filteredContacts.length }}
+        </span>
+      </div>
+
+      <!-- SEARCH -->
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input
+          type="text"
+          placeholder="Search name, email, subject..."
+          (input)="onSearch($event)"
+        />
+
+        @if (searchText()) {
+          <button type="button" class="clear-search" (click)="searchText.set('')">
+            <i class="bi bi-x"></i>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- ==========================================
+         LOADING
+    =========================================== -->
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+
+        <p>Loading contacts...</p>
+      </div>
+    }
+
+    <!-- ==========================================
+         CONTACT TABLE
+    =========================================== -->
+    @if (!isLoading() && filteredContacts.length > 0) {
+      <div class="table-wrapper">
+        <table class="contacts-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+
+              <th>Contact</th>
+
+              <th>Subject</th>
+
+              <th>Message</th>
+
+              <th>Date</th>
+
+              <th>Status</th>
+
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (contact of filteredContacts; track contact.contactId) {
+              <tr [class.unread-row]="!contact.isRead">
+                <!-- ID -->
+                <td>
+                  <span class="contact-id"> #{{ contact.contactId }} </span>
+                </td>
+
+                <!-- CONTACT -->
+                <td>
+                  <div class="contact-info">
+                    <div class="contact-avatar">
+                      {{ contact.name.charAt(0).toUpperCase() }}
+                    </div>
+
+                    <div class="contact-details">
+                      <strong>
+                        {{ contact.name }}
+                      </strong>
+
+                      <a [href]="'mailto:' + contact.email" class="email-link">
+                        {{ contact.email }}
+                      </a>
+                    </div>
+                  </div>
+                </td>
+
+                <!-- SUBJECT -->
+                <td>
+                  <span class="subject-text">
+                    {{ contact.subject }}
+                  </span>
+                </td>
+
+                <!-- MESSAGE -->
+                <td>
+                  <div class="message-preview">
+                    {{ contact.message }}
+                  </div>
+                </td>
+
+                <!-- DATE -->
+                <td>
+                  <span class="date-text">
+                    {{ formatDate(contact.createdDate) }}
+                  </span>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                  @if (contact.isRead) {
+                    <span class="status-badge read">
+                      <i class="bi bi-envelope-open"></i>
+
+                      Read
+                    </span>
+                  } @else {
+                    <span class="status-badge unread">
+                      <i class="bi bi-envelope-fill"></i>
+
+                      Unread
+                    </span>
+                  }
+                </td>
+
+                <!-- ACTIONS -->
+                <td>
+                  <div class="action-buttons">
+                    <!-- VIEW -->
+                    <button
+                      type="button"
+                      class="action-btn view"
+                      title="View message"
+                      (click)="viewContact(contact)"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+
+                    <!-- READ / UNREAD -->
+                    <button
+                      type="button"
+                      class="action-btn status"
+                      [title]="contact.isRead ? 'Mark as unread' : 'Mark as read'"
+                      (click)="toggleReadStatus(contact)"
+                    >
+                      @if (contact.isRead) {
+                        <i class="bi bi-envelope"></i>
+                      } @else {
+                        <i class="bi bi-envelope-open"></i>
+                      }
+                    </button>
+
+                    <!-- DELETE -->
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete contact"
+                      [disabled]="isDeleting()"
+                      (click)="deleteContact(contact)"
+                    >
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ==========================================
+         EMPTY STATE
+    =========================================== -->
+    @if (!isLoading() && filteredContacts.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i class="bi bi-inbox"></i>
+        </div>
+
+        @if (searchText()) {
+          <h3>No contacts found</h3>
+
+          <p>No messages match your search.</p>
+
+          <button type="button" class="clear-filter-btn" (click)="searchText.set('')">
+            Clear Search
+          </button>
+        } @else {
+          <h3>No messages yet</h3>
+
+          <p>Contact messages from your portfolio visitors will appear here.</p>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ==========================================
+       VIEW MESSAGE MODAL
+  =========================================== -->
+  @if (selectedContact) {
+    <div class="modal-backdrop" (click)="closeContact()">
+      <div class="message-modal" (click)="$event.stopPropagation()">
+        <!-- MODAL HEADER -->
+        <div class="modal-header">
+          <div class="modal-title">
+            <div class="modal-avatar">
+              {{ selectedContact.name.charAt(0).toUpperCase() }}
+            </div>
+
+            <div>
+              <h3>
+                {{ selectedContact.name }}
+              </h3>
+
+              <a [href]="'mailto:' + selectedContact.email">
+                {{ selectedContact.email }}
+              </a>
+            </div>
+          </div>
+
+          <button type="button" class="modal-close" (click)="closeContact()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <!-- MODAL BODY -->
+        <div class="modal-body">
+          <div class="message-meta">
+            <div class="meta-item">
+              <span class="meta-label"> Subject </span>
+
+              <strong>
+                {{ selectedContact.subject }}
+              </strong>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label"> Received </span>
+
+              <strong>
+                {{ formatDateTime(selectedContact.createdDate) }}
+              </strong>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label"> Status </span>
+
+              @if (selectedContact.isRead) {
+                <span class="status-badge read">
+                  <i class="bi bi-envelope-open"></i>
+                  Read
+                </span>
+              } @else {
+                <span class="status-badge unread">
+                  <i class="bi bi-envelope-fill"></i>
+                  Unread
+                </span>
+              }
+            </div>
+          </div>
+
+          <div class="message-content">
+            <div class="content-label">
+              <i class="bi bi-chat-left-text"></i>
+
+              Message
+            </div>
+
+            <div class="message-text">
+              {{ selectedContact.message }}
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL FOOTER -->
+        <div class="modal-footer">
+          <a
+            class="reply-btn"
+            [href]="'mailto:' + selectedContact.email + '?subject=Re: ' + selectedContact.subject"
+          >
+            <i class="bi bi-reply"></i>
+
+            Reply
+          </a>
+
+          <button type="button" class="close-btn" (click)="closeContact()">Close</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

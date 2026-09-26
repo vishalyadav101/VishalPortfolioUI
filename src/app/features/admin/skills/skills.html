@@ -1,0 +1,494 @@
+<div class="skills-page">
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-lightning-charge-fill"></i>
+        Skills
+      </h1>
+
+      <p>Manage your technical skills and categories.</p>
+    </div>
+
+    <button type="button" class="btn btn-primary add-btn" (click)="openAddForm()">
+      <i class="bi bi-plus-lg"></i>
+      Add Skill
+    </button>
+  </div>
+
+  <!-- =====================================================
+       SUCCESS MESSAGE
+  ====================================================== -->
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle-fill"></i>
+
+      {{ successMessage() }}
+    </div>
+  }
+
+  <!-- =====================================================
+       ERROR MESSAGE
+  ====================================================== -->
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- =====================================================
+       ADD / EDIT FORM
+  ====================================================== -->
+
+  @if (showForm()) {
+    <section class="skill-form-card">
+      <!-- Form Header -->
+
+      <div class="form-card-header">
+        <div>
+          <h2>
+            @if (isEditMode()) {
+              <i class="bi bi-pencil-square"></i>
+              Edit Skill
+            } @else {
+              <i class="bi bi-plus-circle"></i>
+              Add Skill
+            }
+          </h2>
+
+          <p>Enter the skill information below.</p>
+        </div>
+
+        <button type="button" class="close-btn" (click)="closeForm()" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Form -->
+
+      <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <!-- =================================================
+               SKILL NAME
+          ================================================== -->
+
+          <div class="form-group">
+            <label for="skillName"> Skill Name </label>
+
+            <input
+              id="skillName"
+              type="text"
+              class="form-control"
+              formControlName="skillName"
+              placeholder="e.g. C#, Angular, ASP.NET Core"
+            />
+
+            @if (skillForm.controls.skillName.touched && skillForm.controls.skillName.invalid) {
+              <small class="text-danger"> Skill name is required. </small>
+            }
+          </div>
+
+          <!-- =================================================
+               CATEGORY
+          ================================================== -->
+
+          <div class="form-group">
+            <label for="skillCategoryId">
+              Category
+              <span class="optional-label">(Optional)</span>
+            </label>
+
+            <select id="skillCategoryId" class="form-select" formControlName="skillCategoryId">
+              <!-- Optional category -->
+              <option [ngValue]="null">No Category</option>
+
+              @for (category of categories; track category.skillCategoryId) {
+                <option [ngValue]="category.skillCategoryId">
+                  {{ category.categoryName }}
+                </option>
+              }
+            </select>
+
+            <small class="field-hint">
+              Category is optional. You can leave this as "No Category".
+            </small>
+          </div>
+
+          <!-- =================================================
+               ICON NAME
+          ================================================== -->
+
+          <div class="form-group">
+            <label for="icon"> Icon Name </label>
+
+            <input
+              id="icon"
+              type="text"
+              class="form-control"
+              formControlName="icon"
+              placeholder="e.g. csharp, angular, docker"
+            />
+
+            <small class="field-hint">
+              Simple Icons slug used when no custom icon is uploaded.
+            </small>
+          </div>
+
+          <!-- =================================================
+               DISPLAY ORDER
+          ================================================== -->
+
+          <div class="form-group">
+            <label for="displayOrder"> Display Order </label>
+
+            <input
+              id="displayOrder"
+              type="number"
+              class="form-control"
+              formControlName="displayOrder"
+              min="1"
+            />
+          </div>
+
+          <!-- =================================================
+               ICON UPLOAD
+          ================================================== -->
+
+          <div class="form-group full-width">
+            <label for="iconFile"> Skill Icon </label>
+
+            <input
+              id="iconFile"
+              type="file"
+              class="form-control"
+              accept=".jpg,.jpeg,.png,.webp,.svg,image/jpeg,image/png,image/webp,image/svg+xml"
+              (change)="onIconSelected($event)"
+            />
+
+            <small class="field-hint"> JPG, JPEG, PNG, WEBP or SVG. Maximum 2 MB. </small>
+
+            <!-- =================================================
+                 ICON PREVIEW
+            ================================================== -->
+
+            @if (selectedIconPreview || (isEditMode() && editingSkillId > 0)) {
+              <div class="icon-upload-preview">
+                <!-- Selected New Icon -->
+
+                @if (selectedIconPreview) {
+                  <div class="preview-box">
+                    <img [src]="selectedIconPreview" alt="Selected skill icon" />
+
+                    <span> New Icon </span>
+                  </div>
+                }
+
+                <!-- Existing Icon -->
+
+                @if (!selectedIconPreview && isEditMode()) {
+                  @for (skill of skills; track skill.skillId) {
+                    @if (skill.skillId === editingSkillId && skill.iconUrl) {
+                      <div class="preview-box">
+                        <img [src]="skill.iconUrl" [alt]="skill.skillName + ' icon'" />
+
+                        <span> Current Icon </span>
+                      </div>
+                    }
+                  }
+                }
+              </div>
+            }
+          </div>
+
+          <!-- =================================================
+               ACTIVE
+          ================================================== -->
+
+          <div class="form-group full-width">
+            <div class="active-toggle">
+              <input
+                id="isActive"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="isActive"
+              />
+
+              <label for="isActive"> Active Skill </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             FORM ACTIONS
+        ================================================== -->
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-light cancel-btn" (click)="closeForm()">
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn-primary save-btn"
+            [disabled]="isSaving() || isUploading() || skillForm.invalid"
+          >
+            @if (isSaving() || isUploading()) {
+              <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+              @if (isUploading()) {
+                Uploading...
+              } @else {
+                Saving...
+              }
+            } @else {
+              @if (isEditMode()) {
+                <i class="bi bi-check-lg"></i>
+                Update Skill
+              } @else {
+                <i class="bi bi-plus-lg"></i>
+                Add Skill
+              }
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <!-- =====================================================
+       SKILLS LIST
+  ====================================================== -->
+
+  <section class="skills-card">
+    <!-- =================================================
+         LIST HEADER
+    ================================================== -->
+
+    <div class="list-header">
+      <div>
+        <h2>All Skills</h2>
+
+        <p>{{ skills.length }} skill(s) available</p>
+      </div>
+
+      <!-- Search -->
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input type="text" placeholder="Search skills or category..." (input)="onSearch($event)" />
+      </div>
+    </div>
+
+    <!-- =================================================
+         LOADING
+    ================================================== -->
+
+    @if (isLoading()) {
+      <div class="loading-state">
+        <div class="spinner-border" role="status"></div>
+
+        <p>Loading skills...</p>
+      </div>
+    }
+
+    @if (!isLoading()) {
+      <!-- =================================================
+           EMPTY
+      ================================================== -->
+
+      @if (filteredSkills.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-lightning"></i>
+          </div>
+
+          <h3>No skills found</h3>
+
+          <p>Try another search or add a new skill.</p>
+
+          <button type="button" class="btn btn-primary" (click)="openAddForm()">
+            <i class="bi bi-plus-lg"></i>
+
+            Add Skill
+          </button>
+        </div>
+      }
+
+      <!-- =================================================
+           TABLE
+      ================================================== -->
+
+      @if (filteredSkills.length > 0) {
+        <div class="table-wrapper">
+          <table class="skills-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Skill</th>
+                <th>Category</th>
+                <th>Icon</th>
+                <th>Order</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (skill of filteredSkills; track skill.skillId) {
+                <tr>
+                  <!-- =================================================
+                       ID
+                  ================================================== -->
+
+                  <td class="id-cell">#{{ skill.skillId }}</td>
+
+                  <!-- =================================================
+                       SKILL
+                  ================================================== -->
+
+                  <td>
+                    <div class="skill-name">
+                      <!-- Skill Icon -->
+
+                      <div class="skill-icon">
+                        @if (skill.iconUrl) {
+                          <img
+                            [src]="skill.iconUrl"
+                            [alt]="skill.skillName + ' icon'"
+                            class="table-skill-icon"
+                          />
+                        } @else if (skill.icon) {
+                          <img
+                            [src]="'https://cdn.simpleicons.org/' + skill.icon"
+                            [alt]="skill.skillName + ' icon'"
+                            class="table-skill-icon"
+                          />
+                        } @else {
+                          <i class="bi bi-code-slash"></i>
+                        }
+                      </div>
+
+                      <strong>
+                        {{ skill.skillName }}
+                      </strong>
+                    </div>
+                  </td>
+
+                  <!-- =================================================
+                       CATEGORY
+                  ================================================== -->
+
+                  <td>
+                    @if (skill.categoryName) {
+                      <span class="category-badge">
+                        {{ skill.categoryName }}
+                      </span>
+                    } @else {
+                      <span class="muted"> — </span>
+                    }
+                  </td>
+
+                  <!-- =================================================
+                       ICON
+                  ================================================== -->
+
+                  <td>
+                    @if (skill.iconUrl) {
+                      <div class="icon-info">
+                        <code> Uploaded </code>
+
+                        <small> Custom Icon </small>
+                      </div>
+                    } @else if (skill.icon) {
+                      <div class="icon-info">
+                        <code>
+                          {{ skill.icon }}
+                        </code>
+
+                        <small> Simple Icons </small>
+                      </div>
+                    } @else {
+                      <span class="muted"> — </span>
+                    }
+                  </td>
+
+                  <!-- =================================================
+                       ORDER
+                  ================================================== -->
+
+                  <td>
+                    <span class="order-badge">
+                      {{ skill.displayOrder }}
+                    </span>
+                  </td>
+
+                  <!-- =================================================
+                       STATUS
+                  ================================================== -->
+
+                  <td>
+                    @if (skill.isActive) {
+                      <span class="status active">
+                        <span></span>
+                        Active
+                      </span>
+                    } @else {
+                      <span class="status inactive">
+                        <span></span>
+                        Inactive
+                      </span>
+                    }
+                  </td>
+
+                  <!-- =================================================
+                       ACTIONS
+                  ================================================== -->
+
+                  <td>
+                    <div class="action-buttons">
+                      <!-- Edit -->
+
+                      <button
+                        type="button"
+                        class="action-btn edit"
+                        title="Edit Skill"
+                        (click)="openEditForm(skill)"
+                        [disabled]="isDeleting()"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </button>
+
+                      <!-- Delete -->
+
+                      <button
+                        type="button"
+                        class="action-btn delete"
+                        title="Delete Skill"
+                        (click)="deleteSkill(skill)"
+                        [disabled]="isDeleting()"
+                      >
+                        @if (isDeleting()) {
+                          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                        } @else {
+                          <i class="bi bi-trash3"></i>
+                        }
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+  </section>
+</div>

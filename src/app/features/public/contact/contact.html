@@ -1,0 +1,264 @@
+<div class="contact-page">
+  <!-- HERO -->
+  <section class="contact-hero">
+    <div class="contact-container">
+      <div class="hero-content">
+        <span class="contact-label">GET IN TOUCH</span>
+
+        <h1>Let's <span>Talk</span></h1>
+
+        <p>
+          Have a question, project idea, or just want to connect? Feel free to send me a message.
+          I'll get back to you as soon as possible.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT CONTENT -->
+  <section class="contact-content-section">
+    <div class="contact-container">
+      <div class="contact-grid">
+        <!-- LEFT INFO -->
+        <div class="contact-info">
+          <div class="section-heading">
+            <span>CONTACT ME</span>
+            <h2>
+              I'd love to hear
+              <strong>from you</strong>
+            </h2>
+          </div>
+
+          <p class="contact-description">
+            Whether you have a project in mind, want to discuss an opportunity, or simply want to
+            say hello, you can use the form to get in touch with me.
+          </p>
+
+          <!-- EMAIL -->
+          <div class="contact-info-item">
+            <div class="info-icon">
+              <i class="bi bi-envelope-fill"></i>
+            </div>
+
+            <div>
+              <span>Email</span>
+
+              <a href="mailto:{{ 'your-email@example.com' }}"> your-email@example.com </a>
+            </div>
+          </div>
+
+          <!-- LOCATION -->
+          <div class="contact-info-item">
+            <div class="info-icon">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+
+            <div>
+              <span>Location</span>
+              <strong>Pune, Maharashtra, India</strong>
+            </div>
+          </div>
+
+          <!-- AVAILABILITY -->
+          <div class="contact-info-item">
+            <div class="info-icon">
+              <i class="bi bi-clock-fill"></i>
+            </div>
+
+            <div>
+              <span>Availability</span>
+              <strong>Open to opportunities</strong>
+            </div>
+          </div>
+
+          <div class="contact-note">
+            <i class="bi bi-chat-dots-fill"></i>
+
+            <p>
+              I usually respond to messages as soon as possible. Thank you for taking the time to
+              reach out!
+            </p>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="contact-form-card">
+          <div class="form-header">
+            <span>SEND A MESSAGE</span>
+
+            <h2>
+              Tell me what you're
+              <strong>looking for</strong>
+            </h2>
+          </div>
+
+          <!-- SUCCESS -->
+          @if (successMessage()) {
+            <div class="form-alert success">
+              <i class="bi bi-check-circle-fill"></i>
+
+              <span>
+                {{ successMessage() }}
+              </span>
+
+              <button type="button" (click)="successMessage.set('')">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          }
+
+          <!-- ERROR -->
+          @if (errorMessage()) {
+            <div class="form-alert error">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+
+              <span>
+                {{ errorMessage() }}
+              </span>
+
+              <button type="button" (click)="errorMessage.set('')">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          }
+
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- NAME + EMAIL -->
+            <div class="form-row">
+              <!-- NAME -->
+              <div class="form-group">
+                <label for="name">
+                  Name
+                  <span>*</span>
+                </label>
+
+                <div class="input-wrapper" [class.invalid]="name.invalid && name.touched">
+                  <i class="bi bi-person"></i>
+
+                  <input
+                    id="name"
+                    type="text"
+                    formControlName="name"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                  />
+                </div>
+
+                @if (name.invalid && name.touched) {
+                  <small class="field-error">
+                    @if (name.errors?.['required']) {
+                      Name is required.
+                    } @else if (name.errors?.['minlength']) {
+                      Name must be at least 2 characters.
+                    }
+                  </small>
+                }
+              </div>
+
+              <!-- EMAIL -->
+              <div class="form-group">
+                <label for="email">
+                  Email
+                  <span>*</span>
+                </label>
+
+                <div class="input-wrapper" [class.invalid]="email.invalid && email.touched">
+                  <i class="bi bi-envelope"></i>
+
+                  <input
+                    id="email"
+                    type="email"
+                    formControlName="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                  />
+                </div>
+
+                @if (email.invalid && email.touched) {
+                  <small class="field-error">
+                    @if (email.errors?.['required']) {
+                      Email is required.
+                    } @else if (email.errors?.['email']) {
+                      Please enter a valid email address.
+                    }
+                  </small>
+                }
+              </div>
+            </div>
+
+            <!-- SUBJECT -->
+            <div class="form-group">
+              <label for="subject">
+                Subject
+                <span>*</span>
+              </label>
+
+              <div class="input-wrapper" [class.invalid]="subject.invalid && subject.touched">
+                <i class="bi bi-chat-left-text"></i>
+
+                <input
+                  id="subject"
+                  type="text"
+                  formControlName="subject"
+                  placeholder="What would you like to discuss?"
+                />
+              </div>
+
+              @if (subject.invalid && subject.touched) {
+                <small class="field-error">
+                  @if (subject.errors?.['required']) {
+                    Subject is required.
+                  } @else if (subject.errors?.['minlength']) {
+                    Subject must be at least 3 characters.
+                  }
+                </small>
+              }
+            </div>
+
+            <!-- MESSAGE -->
+            <div class="form-group">
+              <label for="message">
+                Message
+                <span>*</span>
+              </label>
+
+              <div class="textarea-wrapper" [class.invalid]="message.invalid && message.touched">
+                <i class="bi bi-pencil-square"></i>
+
+                <textarea
+                  id="message"
+                  formControlName="message"
+                  rows="7"
+                  placeholder="Write your message here..."
+                ></textarea>
+              </div>
+
+              @if (message.invalid && message.touched) {
+                <small class="field-error">
+                  @if (message.errors?.['required']) {
+                    Message is required.
+                  } @else if (message.errors?.['minlength']) {
+                    Message must be at least 10 characters.
+                  }
+                </small>
+              }
+            </div>
+
+            <!-- SUBMIT -->
+            <button type="submit" class="submit-button" [disabled]="isSubmitting()">
+              @if (isSubmitting()) {
+                <span class="button-spinner"></span>
+
+                Sending...
+              } @else {
+                <i class="bi bi-send-fill"></i>
+
+                Send Message
+              }
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

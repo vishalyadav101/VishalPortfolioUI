@@ -1,0 +1,325 @@
+<div class="experience-page">
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <section class="experience-hero">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+
+    <div class="experience-container">
+      <div class="hero-content">
+        <span class="section-label">
+          <i class="bi bi-briefcase-fill"></i>
+          MY JOURNEY
+        </span>
+
+        <h4>
+          Professional
+          <span>Experience</span>
+        </h4>
+
+        <p>
+          A timeline of my professional journey, responsibilities, projects and the technologies I
+          have worked with.
+        </p>
+
+        <div class="hero-actions">
+          <a routerLink="/projects" class="hero-button primary">
+            View My Projects
+            <i class="bi bi-arrow-right"></i>
+          </a>
+
+          <a routerLink="/contact" class="hero-button secondary">
+            Let's Connect
+            <i class="bi bi-envelope"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- HERO STATS -->
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-icon">
+            <i class="bi bi-briefcase-fill"></i>
+          </div>
+
+          <div>
+            <strong>
+              {{ experienceCount }}
+            </strong>
+
+            <span> Experience </span>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <div class="hero-stat-icon">
+            <i class="bi bi-building"></i>
+          </div>
+
+          <div>
+            <strong>
+              {{ currentExperience ? '1' : '0' }}
+            </strong>
+
+            <span> Current Role </span>
+          </div>
+        </div>
+
+        <div class="hero-stat">
+          <div class="hero-stat-icon">
+            <i class="bi bi-code-slash"></i>
+          </div>
+
+          <div>
+            <strong> .NET </strong>
+
+            <span> Full Stack </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       EXPERIENCE CONTENT
+  ====================================================== -->
+
+  <main class="experience-content">
+    <div class="experience-container">
+      <!-- SECTION HEADER -->
+
+      <div class="section-heading">
+        <span class="section-label"> CAREER TIMELINE </span>
+
+        <h2>
+          My Professional
+          <span>Journey</span>
+        </h2>
+
+        <p>
+          My professional experiences, responsibilities and technologies that have helped me grow as
+          a developer.
+        </p>
+      </div>
+
+      <!-- =================================================
+           LOADING
+      ================================================== -->
+
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="loading-spinner"></div>
+
+          <p>Loading experience...</p>
+        </div>
+      }
+
+      <!-- =================================================
+           ERROR
+      ================================================== -->
+
+      @if (!isLoading && errorMessage) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-exclamation-circle"></i>
+          </div>
+
+          <h3>Unable to load experience</h3>
+
+          <p>
+            {{ errorMessage }}
+          </p>
+        </div>
+      }
+
+      <!-- =================================================
+           EMPTY
+      ================================================== -->
+
+      @if (!isLoading && !errorMessage && experiences.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="bi bi-briefcase"></i>
+          </div>
+
+          <h3>Experience Coming Soon</h3>
+
+          <p>Professional experience details will be updated here soon.</p>
+        </div>
+      }
+
+      <!-- =================================================
+           EXPERIENCE TIMELINE
+      ================================================== -->
+
+      @if (!isLoading && experiences.length > 0) {
+        <div class="experience-timeline">
+          @for (experience of experiences; track trackByExperience($index, experience)) {
+            <article class="experience-item" [class.current]="experience.isCurrent">
+              <!-- TIMELINE SIDE -->
+
+              <div class="timeline-side">
+                <div class="timeline-dot">
+                  <i
+                    class="bi"
+                    [class.bi-building]="!experience.isCurrent"
+                    [class.bi-lightning-charge-fill]="experience.isCurrent"
+                  ></i>
+                </div>
+
+                @if (!$last) {
+                  <div class="timeline-line"></div>
+                }
+              </div>
+
+              <!-- EXPERIENCE CARD -->
+
+              <div class="experience-card">
+                <!-- CARD HEADER -->
+
+                <div class="experience-card-top">
+                  <div class="experience-heading">
+                    <div class="company-icon">
+                      <i class="bi bi-building-fill"></i>
+                    </div>
+
+                    <div>
+                      <span class="experience-date">
+                        {{ getDateRange(experience) }}
+                      </span>
+
+                      <h3>
+                        {{ experience.jobTitle }}
+                      </h3>
+
+                      <h4>
+                        {{ experience.companyName }}
+                      </h4>
+                    </div>
+                  </div>
+
+                  <!-- STATUS -->
+
+                  @if (experience.isCurrent) {
+                    <span class="current-badge">
+                      <span class="current-dot"></span>
+
+                      Current
+                    </span>
+                  } @else {
+                    <span class="past-badge"> Previous </span>
+                  }
+                </div>
+
+                <!-- META INFORMATION -->
+
+                <div class="experience-meta">
+                  @if (experience.employmentType) {
+                    <span>
+                      <i class="bi bi-person-workspace"></i>
+
+                      {{ experience.employmentType }}
+                    </span>
+                  }
+
+                  @if (experience.location) {
+                    <span>
+                      <i class="bi bi-geo-alt-fill"></i>
+
+                      {{ experience.location }}
+                    </span>
+                  }
+                </div>
+
+                <!-- DESCRIPTION -->
+
+                @if (experience.description) {
+                  <div class="experience-description">
+                    <p>
+                      {{ experience.description }}
+                    </p>
+                  </div>
+                }
+
+                <!-- TECHNOLOGIES -->
+
+                @if (getTechnologies(experience).length > 0) {
+                  <div class="technology-section">
+                    <span class="technology-label"> Technologies </span>
+
+                    <div class="technology-list">
+                      @for (technology of getTechnologies(experience); track technology) {
+                        <span class="technology-chip">
+                          <i class="bi bi-code-square"></i>
+
+                          {{ technology }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <!-- CARD FOOTER -->
+
+                <div class="experience-card-footer">
+                  <span class="role-indicator">
+                    <span></span>
+
+                    @if (experience.isCurrent) {
+                      Currently working here
+                    } @else {
+                      Professional Experience
+                    }
+                  </span>
+
+                  @if (getCompanyUrl(experience)) {
+                    <a
+                      class="company-link"
+                      [href]="getCompanyUrl(experience)"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit Company
+
+                      <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                  }
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </div>
+  </main>
+
+  <!-- =====================================================
+       BOTTOM CTA
+  ====================================================== -->
+
+  <section class="experience-cta">
+    <div class="cta-glow"></div>
+
+    <div class="experience-container">
+      <div class="cta-content">
+        <span class="section-label"> LET'S BUILD TOGETHER </span>
+
+        <h2>
+          Have a project
+          <span>in mind?</span>
+        </h2>
+
+        <p>I'm always interested in discussing new projects, ideas and opportunities.</p>
+
+        <a routerLink="/contact" class="cta-button">
+          Get In Touch
+
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

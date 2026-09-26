@@ -1,0 +1,374 @@
+<div class="projects-page">
+  <!-- =====================================================
+       NAVBAR
+  ====================================================== -->
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  @if (isLoading()) {
+    <section class="projects-loading">
+      <div class="loading-spinner"></div>
+
+      <p>Loading projects...</p>
+    </section>
+  }
+
+  @if (!isLoading()) {
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section class="projects-hero">
+      <div class="hero-container">
+        <div class="hero-content">
+          <span class="section-label"> MY PROJECTS </span>
+
+          <h1>
+            Some of My
+            <span> Recent Work </span>
+          </h1>
+
+          <p>
+            Here are some of the projects I have worked on. These projects showcase my skills and
+            experience in building real-world web applications.
+          </p>
+        </div>
+
+        <!-- HERO VISUAL -->
+
+        <div class="hero-visual">
+          <div class="code-window">
+            <div class="window-header">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="code-content">
+              <div class="code-line long"></div>
+
+              <div class="code-line medium"></div>
+
+              <div class="code-line short"></div>
+
+              <div class="code-line long"></div>
+
+              <div class="code-line medium"></div>
+
+              <div class="code-line short"></div>
+
+              <div class="code-line long"></div>
+
+              <div class="code-line medium"></div>
+            </div>
+          </div>
+
+          <div class="tech-badge badge-angular">Angular</div>
+
+          <div class="tech-badge badge-dotnet">.NET</div>
+
+          <div class="tech-badge badge-sql">SQL</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         PROJECT STATS
+    ==================================================== -->
+
+    <section class="project-stats">
+      <div class="stats-container">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-folder-fill"></i>
+          </div>
+
+          <div>
+            <strong> {{ totalProjects }}+ </strong>
+
+            <span> Projects </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-star-fill"></i>
+          </div>
+
+          <div>
+            <strong> {{ featuredProjects }}+ </strong>
+
+            <span> Featured </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-code-slash"></i>
+          </div>
+
+          <div>
+            <strong> 10+ </strong>
+
+            <span> Technologies </span>
+          </div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="bi bi-layers-fill"></i>
+          </div>
+
+          <div>
+            <strong> Full Stack </strong>
+
+            <span> Development </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         PROJECTS SECTION
+    ==================================================== -->
+
+    <main class="projects-content">
+      <div class="projects-container">
+        <!-- FILTER TOOLBAR -->
+
+        <div class="projects-toolbar">
+          <!-- FILTER BUTTONS -->
+
+          <div class="filter-buttons">
+            <button
+              type="button"
+              class="filter-button"
+              [class.active]="selectedFilter() === 'all'"
+              (click)="setFilter('all')"
+            >
+              <i class="bi bi-grid-3x3-gap"></i>
+
+              All Projects
+            </button>
+
+            <button
+              type="button"
+              class="filter-button"
+              [class.active]="selectedFilter() === 'featured'"
+              (click)="setFilter('featured')"
+            >
+              <i class="bi bi-star"></i>
+
+              Featured
+            </button>
+          </div>
+
+          <!-- SEARCH -->
+
+          <div class="search-box">
+            <i class="bi bi-search"></i>
+
+            <input
+              type="text"
+              placeholder="Search projects..."
+              [value]="searchText()"
+              (input)="onSearch($event)"
+            />
+          </div>
+        </div>
+
+        <!-- ERROR -->
+
+        @if (errorMessage()) {
+          <div class="projects-message error">
+            <i class="bi bi-exclamation-circle"></i>
+
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <!-- PROJECT GRID -->
+
+        @if (filteredProjects.length > 0) {
+          <div class="projects-grid">
+            @for (project of filteredProjects; track project.projectId) {
+              <article class="project-card">
+                <!-- IMAGE -->
+
+                <div class="project-image-wrapper">
+                  @if (getProjectImageUrl(project.imageUrl)) {
+                    <img
+                      class="project-image"
+                      [src]="getProjectImageUrl(project.imageUrl)"
+                      [alt]="project.projectName"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <div class="project-placeholder">
+                      <i class="bi bi-code-square"></i>
+                    </div>
+                  }
+
+                  @if (project.isFeatured) {
+                    <span class="featured-badge">
+                      <i class="bi bi-star-fill"></i>
+
+                      Featured
+                    </span>
+                  }
+                </div>
+
+                <!-- CONTENT -->
+
+                <div class="project-content">
+                  <h2>
+                    {{ project.projectName }}
+                  </h2>
+
+                  <p class="project-description">
+                    {{ project.shortDescription }}
+                  </p>
+
+                  <!-- TECHNOLOGIES -->
+
+                  @if (getProjectTechnologies(project).length > 0) {
+                    <div class="technology-tags">
+                      @for (technology of getProjectTechnologies(project); track technology) {
+                        <span>
+                          {{ technology }}
+                        </span>
+                      }
+                    </div>
+                  }
+
+                  <!-- LINKS -->
+
+                  <div class="project-links">
+                    @if (project.liveDemoUrl) {
+                      <a
+                        [href]="project.liveDemoUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project-link primary"
+                      >
+                        <i class="bi bi-box-arrow-up-right"></i>
+
+                        Live Demo
+                      </a>
+                    }
+
+                    @if (project.gitHubUrl) {
+                      <a
+                        [href]="project.gitHubUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project-link"
+                      >
+                        <i class="bi bi-github"></i>
+
+                        GitHub
+                      </a>
+                    }
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <!-- EMPTY -->
+
+          <div class="projects-empty">
+            <div class="empty-icon">
+              <i class="bi bi-search"></i>
+            </div>
+
+            <h3>No Projects Found</h3>
+
+            <p>Try another search term.</p>
+          </div>
+        }
+      </div>
+    </main>
+
+    <!-- ===================================================
+         CTA
+    ==================================================== -->
+
+    <section class="projects-cta">
+      <div class="cta-container">
+        <div>
+          <span class="section-label"> LET'S CONNECT </span>
+
+          <h2>Have a project in mind?</h2>
+
+          <p>I'm always interested in discussing new projects, ideas and opportunities.</p>
+        </div>
+
+        <a routerLink="/contact" class="cta-button">
+          Get In Touch
+
+          <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================================================
+         FOOTER
+    ==================================================== -->
+
+    <footer class="main-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <a routerLink="/" class="footer-brand-link">
+            <span class="footer-brand-icon"> &lt;/&gt; </span>
+
+            <span>
+              <strong> Vishal Yadav </strong>
+
+              <small> .NET Full Stack Developer </small>
+            </span>
+          </a>
+
+          <p>
+            Building modern, secure and scalable web applications with ASP.NET Core, Angular and SQL
+            Server.
+          </p>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+
+          <a routerLink="/"> Home </a>
+
+          <a routerLink="/about"> About </a>
+
+          <a routerLink="/skills"> Skills </a>
+
+          <a routerLink="/projects"> Projects </a>
+
+          <a routerLink="/contact"> Contact </a>
+        </div>
+
+        <div class="footer-column">
+          <h3>Technologies</h3>
+
+          <span> ASP.NET Core </span>
+
+          <span> Angular </span>
+
+          <span> SQL Server </span>
+
+          <span> Entity Framework </span>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span> © {{ 2026 }} Vishal Yadav. All Rights Reserved. </span>
+
+        <span> Built with Angular & .NET </span>
+      </div>
+    </footer>
+  }
+</div>

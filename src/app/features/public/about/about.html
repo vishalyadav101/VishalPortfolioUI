@@ -1,0 +1,284 @@
+<div class="about-page">
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <section class="about-hero">
+    <div class="about-container">
+      <div class="about-hero-content">
+        <span class="about-label"> ABOUT ME </span>
+
+        <h1>
+          Get to Know
+          <span>Me</span>
+        </h1>
+
+        <p>
+          Hello! I'm
+          <strong>
+            {{ profile?.fullName || 'Vishal' }} </strong
+          >, a passionate developer who enjoys building modern and useful web applications.
+        </p>
+
+        <p>
+          I am currently learning, building projects, improving my development skills and gaining
+          real-world experience.
+        </p>
+
+        <div class="about-hero-actions">
+          <a routerLink="/projects" class="primary-button">
+            View My Projects
+
+            <i class="bi bi-arrow-right"></i>
+          </a>
+
+          <a routerLink="/contact" class="secondary-button"> Contact Me </a>
+        </div>
+      </div>
+
+      <!-- IMAGE -->
+
+      <div class="about-hero-image-area">
+        <div class="image-background"></div>
+
+        @if (aboutImage) {
+          <img
+            [src]="aboutImage"
+            [alt]="profile?.fullName || 'Profile Photo'"
+            class="about-profile-image"
+          />
+        } @else {
+          <div class="image-placeholder">
+            <i class="bi bi-person"></i>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       ABOUT CONTENT
+  ====================================================== -->
+
+  <section class="about-content-section">
+    <div class="about-container">
+      <div class="section-heading">
+        <span> WHO I AM </span>
+
+        <h2>
+          A little bit
+          <strong>about me</strong>
+        </h2>
+      </div>
+
+      <div class="about-content-grid">
+        <!-- ABOUT TEXT -->
+
+        <div class="about-text">
+          <p>
+            {{
+              profile?.about ||
+                'I am a developer who enjoys creating clean, practical and user-friendly applications. I like understanding how things work and turning ideas into working software.'
+            }}
+          </p>
+
+          <p>
+            My main interest is full-stack web development. I enjoy working with both frontend and
+            backend technologies and continuously improving my development skills.
+          </p>
+
+          <p>
+            This portfolio represents my learning journey, projects, skills and the experience I
+            gain along the way.
+          </p>
+        </div>
+
+        <!-- BASIC INFORMATION -->
+
+        <div class="about-info">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-person-fill"></i>
+            </div>
+
+            <div>
+              <span> Name </span>
+
+              <strong>
+                {{ profile?.fullName || 'Vishal' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+
+            <div>
+              <span> Location </span>
+
+              <strong>
+                {{ profile?.location || 'Pune, Maharashtra, India' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+
+            <div>
+              <span> Education </span>
+
+              <strong>
+                {{ profile?.education || 'BCA' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-code-slash"></i>
+            </div>
+
+            <div>
+              <span> Focus </span>
+
+              <strong> Full Stack Development </strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-envelope-fill"></i>
+            </div>
+
+            <div>
+              <span> Email </span>
+
+              <strong>
+                {{ profile?.email || 'Available on Contact page' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="bi bi-briefcase-fill"></i>
+            </div>
+
+            <div>
+              <span> Currently </span>
+
+              <strong>
+                {{ experienceText }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       WHAT I DO
+  ====================================================== -->
+
+  <section class="what-i-do-section">
+    <div class="about-container">
+      <div class="section-heading center">
+        <span> WHAT I DO </span>
+
+        <h2>
+          What I'm
+          <strong>working on</strong>
+        </h2>
+      </div>
+
+      <div class="simple-cards">
+        <div class="simple-card">
+          <div class="card-icon">
+            <i class="bi bi-code-slash"></i>
+          </div>
+
+          <h3>Web Development</h3>
+
+          <p>Building responsive and modern web applications with Angular and .NET.</p>
+        </div>
+
+        <div class="simple-card">
+          <div class="card-icon">
+            <i class="bi bi-server"></i>
+          </div>
+
+          <h3>Backend Development</h3>
+
+          <p>Creating REST APIs, business logic, authentication and database solutions.</p>
+        </div>
+
+        <div class="simple-card">
+          <div class="card-icon">
+            <i class="bi bi-database"></i>
+          </div>
+
+          <h3>Database</h3>
+
+          <p>Working with SQL Server and Entity Framework Core for data management.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       CURRENTLY LEARNING
+  ====================================================== -->
+
+  <section class="learning-section">
+    <div class="about-container">
+      <div class="learning-box">
+        <div class="learning-icon">
+          <i class="bi bi-lightbulb-fill"></i>
+        </div>
+
+        <div>
+          <span> CURRENTLY LEARNING </span>
+
+          <h2>Always improving, always learning.</h2>
+
+          <p>
+            I'm continuously working on my development skills, learning new technologies and
+            building projects to gain practical experience.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       SOCIAL / CTA
+  ====================================================== -->
+
+  <section class="about-cta">
+    <div class="about-container">
+      <div class="cta-content">
+        <span> LET'S CONNECT </span>
+
+        <h2>Want to know more about me?</h2>
+
+        <p>Explore my projects, skills and experience.</p>
+      </div>
+
+      <div class="cta-actions">
+        <a routerLink="/projects" class="primary-button">
+          Explore Projects
+
+          <i class="bi bi-arrow-right"></i>
+        </a>
+
+        <a routerLink="/contact" class="secondary-button"> Get In Touch </a>
+      </div>
+    </div>
+  </section>
+</div>

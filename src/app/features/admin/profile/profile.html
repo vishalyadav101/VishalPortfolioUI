@@ -1,0 +1,796 @@
+<div class="profile-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>
+        <i class="bi bi-person-circle"></i>
+        Profile
+      </h1>
+
+      <p>Manage your personal and professional profile information.</p>
+    </div>
+  </div>
+
+  <!-- Loading -->
+
+  @if (isLoading()) {
+    <div class="loading-card">
+      <div class="spinner-border" role="status"></div>
+
+      <p>Loading profile...</p>
+    </div>
+  }
+
+  @if (!isLoading()) {
+    <!-- Success -->
+
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        <i class="bi bi-check-circle-fill"></i>
+
+        {{ successMessage() }}
+      </div>
+    }
+
+    <!-- Error -->
+
+    @if (errorMessage()) {
+      <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div class="profile-grid">
+        <!-- ================================================= -->
+        <!-- HERO INFORMATION -->
+        <!-- ================================================= -->
+
+        <section class="profile-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="bi bi-stars"></i>
+            </div>
+
+            <div>
+              <h2>Hero Information</h2>
+
+              <p>Content displayed in the homepage hero section</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <!-- Greeting -->
+
+            <div class="form-group">
+              <label for="greeting">
+                <i class="bi bi-hand-wave"></i>
+
+                Greeting
+              </label>
+
+              <input
+                id="greeting"
+                type="text"
+                class="form-control"
+                formControlName="greeting"
+                placeholder="Hi, I’m"
+              />
+
+              <small class="form-text"> Example: Hi, I’m </small>
+            </div>
+
+            <!-- Full Name -->
+
+            <div class="form-group">
+              <label for="fullName">
+                <i class="bi bi-person"></i>
+
+                Full Name
+              </label>
+
+              <input
+                id="fullName"
+                type="text"
+                class="form-control"
+                formControlName="fullName"
+                placeholder="Vishal Yadav"
+              />
+
+              @if (profileForm.controls.fullName.touched && profileForm.controls.fullName.invalid) {
+                <small class="text-danger"> Full name is required. </small>
+              }
+            </div>
+
+            <!-- Headline -->
+
+            <div class="form-group full-width">
+              <label for="headline">
+                <i class="bi bi-briefcase"></i>
+
+                Professional Headline
+              </label>
+
+              <input
+                id="headline"
+                type="text"
+                class="form-control"
+                formControlName="headline"
+                placeholder=".NET Full Stack Developer"
+              />
+            </div>
+
+            <!-- Short Description -->
+
+            <div class="form-group full-width">
+              <label for="shortDescription">
+                <i class="bi bi-text-paragraph"></i>
+
+                Hero Description
+              </label>
+
+              <textarea
+                id="shortDescription"
+                class="form-control"
+                rows="4"
+                formControlName="shortDescription"
+                placeholder="I build scalable and modern web applications..."
+              ></textarea>
+            </div>
+
+            <!-- Code Note -->
+
+            <div class="form-group full-width">
+              <label for="codeNote">
+                <i class="bi bi-code-slash"></i>
+
+                Code Note
+              </label>
+
+              <input
+                id="codeNote"
+                type="text"
+                class="form-control"
+                formControlName="codeNote"
+                placeholder="Code / Build / Grow / Repeat"
+              />
+            </div>
+
+            <!-- Availability Status -->
+
+            <div class="form-group">
+              <label for="availabilityStatus">
+                <i class="bi bi-circle-fill"></i>
+
+                Availability Status
+              </label>
+
+              <input
+                id="availabilityStatus"
+                type="text"
+                class="form-control"
+                formControlName="availabilityStatus"
+                placeholder="Open to Opportunities"
+              />
+            </div>
+
+            <!-- Availability Message -->
+
+            <div class="form-group">
+              <label for="availabilityMessage">
+                <i class="bi bi-chat-heart"></i>
+
+                Availability Message
+              </label>
+
+              <input
+                id="availabilityMessage"
+                type="text"
+                class="form-control"
+                formControlName="availabilityMessage"
+                placeholder="Let’s build something amazing!"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================= -->
+        <!-- PERSONAL INFORMATION -->
+        <!-- ================================================= -->
+
+        <section class="profile-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="bi bi-person"></i>
+            </div>
+
+            <div>
+              <h2>Personal Information</h2>
+
+              <p>Basic profile information</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <!-- Full Name -->
+
+            <div class="form-group">
+              <label for="personalFullName"> Full Name </label>
+
+              <input
+                id="personalFullName"
+                type="text"
+                class="form-control"
+                formControlName="fullName"
+                placeholder="Enter your full name"
+              />
+            </div>
+
+            <!-- Email -->
+
+            <div class="form-group">
+              <label for="email"> Email </label>
+
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="your@email.com"
+              />
+            </div>
+
+            <!-- Phone -->
+
+            <div class="form-group">
+              <label for="phone"> Phone </label>
+
+              <input
+                id="phone"
+                type="text"
+                class="form-control"
+                formControlName="phone"
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <!-- Location -->
+
+            <div class="form-group">
+              <label for="location"> Location </label>
+
+              <input
+                id="location"
+                type="text"
+                class="form-control"
+                formControlName="location"
+                placeholder="Pune, Maharashtra, India"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================= -->
+        <!-- ABOUT INFORMATION -->
+        <!-- ================================================= -->
+
+        <section class="profile-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="bi bi-person-vcard"></i>
+            </div>
+
+            <div>
+              <h2>About Section</h2>
+
+              <p>Manage all content displayed in the homepage About section.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <!-- About Label -->
+
+            <div class="form-group">
+              <label for="aboutLabel">
+                <i class="bi bi-tag"></i>
+
+                About Label
+              </label>
+
+              <input
+                id="aboutLabel"
+                type="text"
+                class="form-control"
+                formControlName="aboutLabel"
+                placeholder="ABOUT ME"
+              />
+
+              <small class="form-text"> Example: ABOUT ME </small>
+            </div>
+
+            <!-- Education -->
+
+            <div class="form-group">
+              <label for="education">
+                <i class="bi bi-mortarboard"></i>
+
+                Education
+              </label>
+
+              <input
+                id="education"
+                type="text"
+                class="form-control"
+                formControlName="education"
+                placeholder="BCA Graduate"
+              />
+
+              <small class="form-text"> Example: BCA Graduate </small>
+            </div>
+
+            <!-- About Heading -->
+
+            <div class="form-group">
+              <label for="aboutHeading">
+                <i class="bi bi-type-h1"></i>
+
+                About Heading
+              </label>
+
+              <input
+                id="aboutHeading"
+                type="text"
+                class="form-control"
+                formControlName="aboutHeading"
+                placeholder="Passionate about"
+              />
+            </div>
+
+            <!-- About Highlight -->
+
+            <div class="form-group">
+              <label for="aboutHighlight">
+                <i class="bi bi-highlighter"></i>
+
+                About Highlight
+              </label>
+
+              <input
+                id="aboutHighlight"
+                type="text"
+                class="form-control"
+                formControlName="aboutHighlight"
+                placeholder="Building Real Solutions"
+              />
+            </div>
+
+            <!-- About Description -->
+
+            <div class="form-group full-width">
+              <label for="about">
+                <i class="bi bi-file-text"></i>
+
+                About Description
+              </label>
+
+              <textarea
+                id="about"
+                class="form-control"
+                rows="7"
+                formControlName="about"
+                placeholder="Write about yourself..."
+              ></textarea>
+
+              <small class="form-text">
+                This content will be displayed in the About section.
+              </small>
+            </div>
+
+            <!-- ================================================= -->
+            <!-- ABOUT IMAGE UPLOAD -->
+            <!-- ================================================= -->
+
+            <div class="form-group full-width">
+              <label for="aboutImage">
+                <i class="bi bi-image"></i>
+
+                About Image
+              </label>
+
+              <!-- File Selector -->
+
+              <input
+                id="aboutImage"
+                type="file"
+                class="form-control"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                (change)="onAboutImageSelected($event)"
+              />
+
+              <small class="form-text"> Select JPG, JPEG, PNG or WEBP image. Maximum 5 MB. </small>
+
+              <!-- Selected File Name -->
+
+              @if (selectedAboutImageName()) {
+                <div class="selected-file-info mt-2">
+                  <i class="bi bi-file-earmark-image"></i>
+
+                  <span>
+                    Selected:
+
+                    <strong>
+                      {{ selectedAboutImageName() }}
+                    </strong>
+                  </span>
+                </div>
+              }
+
+              <!-- Upload Button -->
+
+              <button
+                type="button"
+                class="btn btn-outline-primary mt-3"
+                (click)="uploadAboutImage()"
+                [disabled]="!selectedAboutImage || isUploadingAboutImage()"
+              >
+                @if (isUploadingAboutImage()) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                  Uploading...
+                } @else {
+                  <i class="bi bi-cloud-upload me-1"></i>
+
+                  Upload About Image
+                }
+              </button>
+
+              <!-- Upload Status -->
+
+              @if (isUploadingAboutImage()) {
+                <div class="alert alert-info mt-3 mb-0">
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+
+                  Uploading About image...
+                </div>
+              }
+            </div>
+
+            <!-- ================================================= -->
+            <!-- ABOUT IMAGE PREVIEW -->
+            <!-- ================================================= -->
+
+            @if (aboutImagePreview || profileForm.controls.aboutImageUrl.value) {
+              <div class="form-group full-width">
+                <label>
+                  <i class="bi bi-eye"></i>
+
+                  About Image Preview
+                </label>
+
+                <div class="about-image-preview">
+                  <img
+                    [src]="aboutImagePreview || profileForm.controls.aboutImageUrl.value"
+                    alt="About section image preview"
+                  />
+                </div>
+
+                <!-- Current Uploaded URL -->
+
+                @if (profileForm.controls.aboutImageUrl.value) {
+                  <small class="form-text d-block mt-2">
+                    <i class="bi bi-check-circle text-success"></i>
+
+                    About image uploaded successfully.
+                  </small>
+                }
+              </div>
+            }
+
+            <!-- Quote -->
+
+            <div class="form-group">
+              <label for="quote">
+                <i class="bi bi-quote"></i>
+
+                Quote
+              </label>
+
+              <textarea
+                id="quote"
+                class="form-control"
+                rows="4"
+                formControlName="quote"
+                placeholder="Discipline turns ideas into reality."
+              ></textarea>
+            </div>
+
+            <!-- Quote Author -->
+
+            <div class="form-group">
+              <label for="quoteAuthor">
+                <i class="bi bi-person-heart"></i>
+
+                Quote Author
+              </label>
+
+              <input
+                id="quoteAuthor"
+                type="text"
+                class="form-control"
+                formControlName="quoteAuthor"
+                placeholder="Vishal Yadav"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================= -->
+        <!-- PROFILE FILES -->
+        <!-- ================================================= -->
+
+        <section class="profile-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="bi bi-cloud-arrow-up"></i>
+            </div>
+
+            <div>
+              <h2>Profile Files</h2>
+
+              <p>Upload your profile image and resume directly from your computer.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <!-- PROFILE IMAGE -->
+
+            <div class="form-group full-width">
+              <label for="profileImage">
+                <i class="bi bi-person-bounding-box"></i>
+
+                Profile Image
+              </label>
+
+              <input
+                id="profileImage"
+                type="file"
+                class="form-control"
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                (change)="onProfileImageSelected($event)"
+              />
+
+              @if (selectedProfileImageName()) {
+                <small class="form-text">
+                  Selected:
+
+                  <strong>
+                    {{ selectedProfileImageName() }}
+                  </strong>
+                </small>
+              }
+
+              <small class="form-text"> JPG, JPEG, PNG or WEBP — Maximum 5 MB </small>
+
+              <button
+                type="button"
+                class="btn btn-outline-primary mt-2"
+                (click)="uploadProfileImage()"
+                [disabled]="!selectedProfileImage || isUploadingImage()"
+              >
+                @if (isUploadingImage()) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                  Uploading...
+                } @else {
+                  <i class="bi bi-cloud-upload me-1"></i>
+
+                  Upload Profile Image
+                }
+              </button>
+
+              @if (profileForm.controls.profileImageUrl.value) {
+                <div class="mt-3">
+                  <small class="form-text d-block mb-2"> Current Profile Image </small>
+
+                  <img
+                    [src]="profileForm.controls.profileImageUrl.value"
+                    alt="Profile"
+                    style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%"
+                  />
+                </div>
+              }
+            </div>
+
+            <!-- RESUME -->
+
+            <div class="form-group full-width">
+              <label for="resumeFile">
+                <i class="bi bi-file-earmark-pdf"></i>
+
+                Resume PDF
+              </label>
+
+              <input
+                id="resumeFile"
+                type="file"
+                class="form-control"
+                accept=".pdf,application/pdf"
+                (change)="onResumeSelected($event)"
+              />
+
+              @if (selectedResumeName()) {
+                <small class="form-text">
+                  Selected:
+
+                  <strong>
+                    {{ selectedResumeName() }}
+                  </strong>
+                </small>
+              }
+
+              <small class="form-text"> PDF only — Maximum 10 MB </small>
+
+              <button
+                type="button"
+                class="btn btn-outline-primary mt-2"
+                (click)="uploadResume()"
+                [disabled]="!selectedResume || isUploadingResume()"
+              >
+                @if (isUploadingResume()) {
+                  <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+
+                  Uploading...
+                } @else {
+                  <i class="bi bi-cloud-upload me-1"></i>
+
+                  Upload Resume
+                }
+              </button>
+
+              @if (profileForm.controls.resumeUrl.value) {
+                <div class="mt-3">
+                  <small class="form-text d-block mb-2"> Current Resume </small>
+
+                  <a
+                    [href]="profileForm.controls.resumeUrl.value"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-sm btn-outline-secondary"
+                  >
+                    <i class="bi bi-file-earmark-pdf me-1"></i>
+
+                    View Current Resume
+                  </a>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================= -->
+        <!-- PROFILE LINKS -->
+        <!-- ================================================= -->
+
+        <section class="profile-card">
+          <div class="card-header">
+            <div class="header-icon">
+              <i class="bi bi-link-45deg"></i>
+            </div>
+
+            <div>
+              <h2>Profile Links</h2>
+
+              <p>Social and professional links</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <!-- GitHub -->
+
+            <div class="form-group">
+              <label for="gitHubUrl">
+                <i class="bi bi-github"></i>
+
+                GitHub URL
+              </label>
+
+              <input
+                id="gitHubUrl"
+                type="url"
+                class="form-control"
+                formControlName="gitHubUrl"
+                placeholder="https://github.com/username"
+              />
+            </div>
+
+            <!-- LinkedIn -->
+
+            <div class="form-group">
+              <label for="linkedInUrl">
+                <i class="bi bi-linkedin"></i>
+
+                LinkedIn URL
+              </label>
+
+              <input
+                id="linkedInUrl"
+                type="url"
+                class="form-control"
+                formControlName="linkedInUrl"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+
+            <!-- Profile Image URL -->
+
+            <div class="form-group full-width">
+              <label for="profileImageUrl">
+                <i class="bi bi-image"></i>
+
+                Profile Image URL
+              </label>
+
+              <input
+                id="profileImageUrl"
+                type="text"
+                class="form-control"
+                formControlName="profileImageUrl"
+                readonly
+              />
+
+              <small class="form-text">
+                This URL is automatically updated after image upload.
+              </small>
+            </div>
+
+            <!-- Resume URL -->
+
+            <div class="form-group full-width">
+              <label for="resumeUrl">
+                <i class="bi bi-file-earmark-pdf"></i>
+
+                Resume URL
+              </label>
+
+              <input
+                id="resumeUrl"
+                type="text"
+                class="form-control"
+                formControlName="resumeUrl"
+                readonly
+              />
+
+              <small class="form-text">
+                This URL is automatically updated after resume upload.
+              </small>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ================================================= -->
+      <!-- SAVE BUTTON -->
+      <!-- ================================================= -->
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isSaving() || profileForm.invalid"
+        >
+          @if (isSaving()) {
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+
+            Saving...
+          } @else {
+            <i class="bi bi-check-lg"></i>
+
+            Save Changes
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>
