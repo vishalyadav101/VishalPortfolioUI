@@ -408,7 +408,7 @@ export class Projects implements OnInit {
       return imageUrl;
     }
 
-    return `https://localhost:7295${imageUrl}`;
+    return `https://vishalportfolioapi.onrender.com${imageUrl}`;
   }
 
   // ==========================================

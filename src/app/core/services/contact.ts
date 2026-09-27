@@ -25,13 +25,12 @@ export interface ContactUpdateRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl =
-    'https://localhost:7295/api/Contact';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Contact';
 
   getContacts(): Observable<Contact[]> {
     return this.http.get<Contact[]>(this.apiUrl);
@@ -41,28 +40,15 @@ export class ContactService {
     return this.http.get<Contact>(`${this.apiUrl}/${id}`);
   }
 
-  createContact(
-    data: ContactCreateRequest
-  ): Observable<Contact> {
-    return this.http.post<Contact>(
-      this.apiUrl,
-      data
-    );
+  createContact(data: ContactCreateRequest): Observable<Contact> {
+    return this.http.post<Contact>(this.apiUrl, data);
   }
 
-  updateContact(
-    id: number,
-    data: ContactUpdateRequest
-  ): Observable<Contact> {
-    return this.http.put<Contact>(
-      `${this.apiUrl}/${id}`,
-      data
-    );
+  updateContact(id: number, data: ContactUpdateRequest): Observable<Contact> {
+    return this.http.put<Contact>(`${this.apiUrl}/${id}`, data);
   }
 
   deleteContact(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${id}`
-    );
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -10,7 +10,7 @@ import { Project, ProjectCreateRequest, ProjectUpdateRequest } from '../models/p
 export class ProjectService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7295/api/Project';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Project';
 
   // ==========================================
   // GET ALL PROJECTS

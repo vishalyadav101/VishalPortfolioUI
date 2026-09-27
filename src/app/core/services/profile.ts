@@ -10,9 +10,9 @@ import { Profile, ProfileUpdateRequest } from '../models/profile.model';
 export class ProfileService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7295/api/Profile';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Profile';
 
-  private readonly apiBaseUrl = 'https://localhost:7295';
+  private readonly apiBaseUrl = 'https://vishalportfolioapi.onrender.com';
 
   // ==========================================
   // GET PROFILE

@@ -10,9 +10,9 @@ import { Skill, SkillCreateRequest, SkillUpdateRequest } from '../models/skill.m
 export class SkillService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7295/api/Skill';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Skill';
 
-  private readonly apiBaseUrl = 'https://localhost:7295';
+  private readonly apiBaseUrl = 'https://vishalportfolioapi.onrender.com';
 
   // ==========================================
   // GET ALL SKILLS

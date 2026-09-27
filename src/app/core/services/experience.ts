@@ -14,7 +14,7 @@ import {
 export class ExperienceService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7295/api/Experience';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Experience';
 
   // ==========================================
   // GET ALL

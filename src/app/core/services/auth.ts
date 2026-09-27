@@ -24,7 +24,7 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly apiUrl = 'https://localhost:7295/api/Auth';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Auth';
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(

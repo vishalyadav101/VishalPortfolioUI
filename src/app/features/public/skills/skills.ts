@@ -169,7 +169,7 @@ export class Skills implements OnInit {
         return iconUrl;
       }
 
-      return `https://localhost:7295${iconUrl}`;
+      return `https://vishalportfolioapi.onrender.com${iconUrl}`;
     }
 
     // Simple Icons

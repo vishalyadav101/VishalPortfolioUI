@@ -35,7 +35,7 @@ export interface SocialLinkUpdateRequest {
 export class SocialLinkService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://localhost:7295/api/SocialLink';
+  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/SocialLink';
 
   // ================================
   // GET ALL
