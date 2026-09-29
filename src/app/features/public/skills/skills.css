@@ -192,7 +192,7 @@
 
   align-items: center;
 
-  gap: 40px;
+  gap: 1px;
 }
 
 .hero-content {
@@ -232,7 +232,7 @@
 .hero-content p {
   max-width: 600px;
 
-  margin: 20px 0 0;
+  margin: 2px 0 0;
 
   color: #b8c8dc;
 
@@ -492,7 +492,7 @@
 ========================================================= */
 
 .skills-content {
-  padding: 55px 0 75px;
+  padding: 5px 0 75px;
 
   background: #f8fbff;
 }
@@ -508,7 +508,7 @@
 ========================================================= */
 
 .skills-toolbar {
-  margin-bottom: 30px;
+  margin-bottom: 5px;
 
   display: flex;
 
@@ -516,7 +516,7 @@
 
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 5px;
 }
 
 .category-buttons {
@@ -528,7 +528,7 @@
 }
 
 .category-button {
-  padding: 10px 15px;
+  padding: 1px 10px;
 
   display: inline-flex;
 
@@ -1183,11 +1183,11 @@
   }
 
   .hero-content {
-    padding: 45px 0;
+    padding: 4px 0;
   }
 
   .hero-content h1 {
-    font-size: 38px;
+    font-size: 25px;
 
     letter-spacing: -1.5px;
   }
@@ -1211,7 +1211,7 @@
   }
 
   .skills-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 12px;
   }
@@ -1243,13 +1243,13 @@
 
 @media (max-width: 420px) {
   .skills-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .category-buttons {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .category-button {

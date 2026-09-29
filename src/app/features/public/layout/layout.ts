@@ -10,7 +10,7 @@ import { Profile } from '../../../core/models/profile.model';
   selector: 'app-layout',
   standalone: true,
 
-  imports: [CommonModule, RouterLink, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
 
   templateUrl: './layout.html',
   styleUrl: './layout.css',
