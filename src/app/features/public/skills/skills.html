@@ -1,9 +1,5 @@
 <div class="skills-page">
   <!-- =====================================================
-       NAVBAR
-  ====================================================== -->
-
-  <!-- =====================================================
        LOADING
   ====================================================== -->
 
@@ -117,7 +113,9 @@
 
     <main class="skills-content">
       <div class="skills-container">
-        <!-- TOOLBAR -->
+        <!-- =================================================
+             TOOLBAR
+        ================================================== -->
 
         <div class="skills-toolbar">
           <!-- CATEGORY BUTTONS -->
@@ -160,7 +158,9 @@
           </div>
         </div>
 
-        <!-- ERROR -->
+        <!-- =================================================
+             ERROR
+        ================================================== -->
 
         @if (errorMessage()) {
           <div class="skills-message error">
@@ -170,13 +170,17 @@
           </div>
         }
 
-        <!-- SKILLS GRID -->
+        <!-- =================================================
+             SKILLS GRID
+        ================================================== -->
 
         @if (filteredSkills.length > 0) {
           <div class="skills-grid">
             @for (skill of filteredSkills; track skill.skillId) {
               <article class="skill-card">
-                <!-- ICON -->
+                <!-- =================================================
+                     ICON
+                ================================================== -->
 
                 <div class="skill-icon-wrapper">
                   @if (getSkillIconUrl(skill)) {
@@ -192,23 +196,17 @@
                   }
                 </div>
 
-                <!-- NAME -->
+                <!-- =================================================
+                     NAME
+                ================================================== -->
 
                 <h2>
                   {{ skill.skillName }}
                 </h2>
 
-                <!-- CATEGORY -->
-
-                @if (skill.categoryName) {
-                  <span class="skill-category">
-                    {{ skill.categoryName }}
-                  </span>
-                } @else {
-                  <span class="skill-category"> Technology </span>
-                }
-
-                <!-- ORDER -->
+                <!-- =================================================
+                     LEVEL / ORDER
+                ================================================== -->
 
                 <div class="skill-level">
                   <span>
@@ -223,7 +221,9 @@
             }
           </div>
         } @else {
-          <!-- EMPTY -->
+          <!-- =================================================
+               EMPTY
+          ================================================== -->
 
           <div class="skills-empty">
             <div class="empty-icon">

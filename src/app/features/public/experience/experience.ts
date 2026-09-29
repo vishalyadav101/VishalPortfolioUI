@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ExperienceService } from '../../../core/services/experience';
@@ -8,12 +8,24 @@ import { Experience } from '../../../core/models/experience.model';
 @Component({
   selector: 'app-experience',
   standalone: true,
+
   imports: [CommonModule, RouterLink],
+
   templateUrl: './experience.html',
   styleUrl: './experience.css',
 })
 export class ExperiencePage implements OnInit {
+  // =====================================================
+  // SERVICES
+  // =====================================================
+
   private readonly experienceService = inject(ExperienceService);
+
+  private readonly changeDetector = inject(ChangeDetectorRef);
+
+  // =====================================================
+  // DATA
+  // =====================================================
 
   experiences: Experience[] = [];
 
@@ -21,22 +33,47 @@ export class ExperiencePage implements OnInit {
 
   errorMessage = '';
 
+  // =====================================================
+  // INIT
+  // =====================================================
+
   ngOnInit(): void {
     this.loadExperiences();
   }
+
+  // =====================================================
+  // LOAD EXPERIENCES
+  // =====================================================
 
   private loadExperiences(): void {
     this.isLoading = true;
     this.errorMessage = '';
 
+    this.changeDetector.detectChanges();
+
     this.experienceService.getExperiences().subscribe({
+      // =================================================
+      // SUCCESS
+      // =================================================
+
       next: (response: Experience[]) => {
         this.experiences = (response || [])
           .filter((experience: Experience) => experience.isActive !== false)
           .sort((a: Experience, b: Experience) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
         this.isLoading = false;
+
+        /*
+         * Important:
+         * API response ke baad Angular ko manually
+         * UI update karne ke liye notify kar rahe hain.
+         */
+        this.changeDetector.detectChanges();
       },
+
+      // =================================================
+      // ERROR
+      // =================================================
 
       error: (error) => {
         console.error('Experience API Error:', error);
@@ -46,6 +83,12 @@ export class ExperiencePage implements OnInit {
         this.errorMessage = 'Unable to load experience details.';
 
         this.isLoading = false;
+
+        /*
+         * Error state bhi immediately screen par
+         * show hoga.
+         */
+        this.changeDetector.detectChanges();
       },
     });
   }
@@ -116,8 +159,10 @@ export class ExperiencePage implements OnInit {
 
     const technologies = data.technologies;
 
+    // Array response
     if (Array.isArray(technologies)) {
       return technologies
+
         .map((technology: any) => {
           if (typeof technology === 'string') {
             return technology.trim();
@@ -125,13 +170,18 @@ export class ExperiencePage implements OnInit {
 
           return (technology?.technologyName || technology?.name || '').trim();
         })
+
         .filter((technology: string) => !!technology);
     }
 
+    // String response
     if (typeof technologies === 'string') {
       return technologies
+
         .split(',')
+
         .map((technology: string) => technology.trim())
+
         .filter((technology: string) => !!technology);
     }
 

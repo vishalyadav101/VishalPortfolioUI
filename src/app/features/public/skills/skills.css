@@ -274,7 +274,7 @@
 .skills-content {
   width: 100%;
 
-  padding: 18px 0 55px;
+  padding: 10px 0 40px;
 
   background: #f8fbff;
 
@@ -296,7 +296,7 @@
 .skills-toolbar {
   width: 100%;
 
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 
   display: flex;
 
@@ -304,7 +304,7 @@
 
   justify-content: space-between;
 
-  gap: 12px;
+  gap: 10px;
 }
 
 .category-buttons {
@@ -314,7 +314,7 @@
 
   flex-wrap: wrap;
 
-  gap: 8px;
+  gap: 7px;
 }
 
 .category-button {
@@ -444,7 +444,7 @@
 
   min-height: 175px;
 
-  padding: 25px 15px 18px;
+  padding: 22px 15px 15px;
 
   display: flex;
 
@@ -490,7 +490,7 @@
 
   height: 76px;
 
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 
   display: grid;
 
@@ -540,33 +540,7 @@
 }
 
 /* =========================================================
-   CATEGORY
-========================================================= */
-
-.skill-category {
-  max-width: 90%;
-
-  margin-top: 6px;
-
-  padding: 5px 10px;
-
-  border-radius: 20px;
-
-  color: #176de3;
-
-  background: #edf5ff;
-
-  font-size: 8px;
-
-  font-weight: 600;
-
-  line-height: 1.25;
-
-  overflow-wrap: anywhere;
-}
-
-/* =========================================================
-   LEVEL
+   LEVEL / NUMBER / PROGRESS
 ========================================================= */
 
 .skill-level {
@@ -574,7 +548,7 @@
 
   min-width: 0;
 
-  margin-top: 15px;
+  margin-top: 12px;
 
   display: flex;
 
@@ -589,6 +563,8 @@
   color: #8b9bb0;
 
   font-size: 8px;
+
+  text-align: left;
 }
 
 .level-line {
@@ -904,10 +880,12 @@
     height: 230px;
   }
 
-  /* CONTENT GAP REDUCED */
+  /* =====================================================
+     CONTENT
+  ====================================================== */
 
   .skills-content {
-    padding: 10px 0 35px;
+    padding: 8px 0 30px;
   }
 
   .skills-container {
@@ -916,7 +894,9 @@
     max-width: 600px;
   }
 
-  /* CATEGORY BUTTONS */
+  /* =====================================================
+     CATEGORY BUTTONS
+  ====================================================== */
 
   .category-buttons {
     width: calc(100% - 8px);
@@ -948,7 +928,9 @@
     text-align: center;
   }
 
-  /* SEARCH */
+  /* =====================================================
+     SEARCH
+  ====================================================== */
 
   .search-box {
     width: calc(100% - 8px);
@@ -964,33 +946,39 @@
     font-size: 11px;
   }
 
-  /* GRID */
+  /* =====================================================
+     SKILLS GRID
+  ====================================================== */
 
   .skills-grid {
     width: 100%;
 
-    margin-top: 10px;
+    margin-top: 8px;
 
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
     gap: 8px;
   }
 
-  /* CARD */
+  /* =====================================================
+     CARD
+  ====================================================== */
 
   .skill-card {
     width: 100%;
 
     min-width: 0;
 
-    min-height: 150px;
+    min-height: 145px;
 
-    padding: 12px 5px 11px;
+    padding: 12px 5px 10px;
 
     border-radius: 11px;
   }
 
-  /* ICON */
+  /* =====================================================
+     ICON
+  ====================================================== */
 
   .skill-icon-wrapper {
     width: 54px;
@@ -1014,7 +1002,9 @@
     font-size: 25px;
   }
 
-  /* NAME */
+  /* =====================================================
+     NAME
+  ====================================================== */
 
   .skill-card h2 {
     font-size: 12px;
@@ -1022,24 +1012,12 @@
     line-height: 1.2;
   }
 
-  /* CATEGORY */
-
-  .skill-category {
-    max-width: 92%;
-
-    margin-top: 5px;
-
-    padding: 4px 6px;
-
-    font-size: 6.5px;
-
-    line-height: 1.2;
-  }
-
-  /* LEVEL */
+  /* =====================================================
+     NUMBER + PROGRESS
+  ====================================================== */
 
   .skill-level {
-    margin-top: 10px;
+    margin-top: 9px;
 
     gap: 5px;
   }
@@ -1054,7 +1032,9 @@
     height: 4px;
   }
 
-  /* CTA */
+  /* =====================================================
+     CTA
+  ====================================================== */
 
   .cta-container {
     width: calc(100% - 24px);
@@ -1076,7 +1056,9 @@
     width: calc(100% - 16px);
   }
 
-  /* SMALLER CATEGORY AREA */
+  /* =====================================================
+     CATEGORY BUTTONS
+  ====================================================== */
 
   .category-buttons {
     width: calc(100% - 12px);
@@ -1092,7 +1074,9 @@
     font-size: 8px;
   }
 
-  /* SMALLER SEARCH */
+  /* =====================================================
+     SEARCH
+  ====================================================== */
 
   .search-box {
     width: calc(100% - 12px);
@@ -1102,23 +1086,33 @@
     margin-top: 0;
   }
 
-  /* THREE CARDS */
+  /* =====================================================
+     THREE SKILLS PER ROW
+  ====================================================== */
 
   .skills-grid {
     width: 100%;
 
-    margin-top: 8px;
+    margin-top: 7px;
 
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
     gap: 7px;
   }
 
+  /* =====================================================
+     CARD
+  ====================================================== */
+
   .skill-card {
-    min-height: 145px;
+    min-height: 140px;
 
     padding: 10px 4px;
   }
+
+  /* =====================================================
+     ICON
+  ====================================================== */
 
   .skill-icon-wrapper {
     width: 50px;
@@ -1136,20 +1130,20 @@
     height: 36px;
   }
 
+  /* =====================================================
+     NAME
+  ====================================================== */
+
   .skill-card h2 {
     font-size: 11px;
   }
 
-  .skill-category {
-    max-width: 90%;
-
-    padding: 3px 5px;
-
-    font-size: 6px;
-  }
+  /* =====================================================
+     NUMBER + PROGRESS
+  ====================================================== */
 
   .skill-level {
-    margin-top: 8px;
+    margin-top: 7px;
   }
 
   .level-line {
