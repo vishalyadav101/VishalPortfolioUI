@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ExperienceService } from '../../../core/services/experience';
@@ -20,8 +20,6 @@ export class ExperiencePage implements OnInit {
   // =====================================================
 
   private readonly experienceService = inject(ExperienceService);
-
-  private readonly changeDetector = inject(ChangeDetectorRef);
 
   // =====================================================
   // DATA
@@ -49,8 +47,6 @@ export class ExperiencePage implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.changeDetector.detectChanges();
-
     this.experienceService.getExperiences().subscribe({
       // =================================================
       // SUCCESS
@@ -62,13 +58,6 @@ export class ExperiencePage implements OnInit {
           .sort((a: Experience, b: Experience) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
         this.isLoading = false;
-
-        /*
-         * Important:
-         * API response ke baad Angular ko manually
-         * UI update karne ke liye notify kar rahe hain.
-         */
-        this.changeDetector.detectChanges();
       },
 
       // =================================================
@@ -83,12 +72,6 @@ export class ExperiencePage implements OnInit {
         this.errorMessage = 'Unable to load experience details.';
 
         this.isLoading = false;
-
-        /*
-         * Error state bhi immediately screen par
-         * show hoga.
-         */
-        this.changeDetector.detectChanges();
       },
     });
   }
@@ -162,7 +145,6 @@ export class ExperiencePage implements OnInit {
     // Array response
     if (Array.isArray(technologies)) {
       return technologies
-
         .map((technology: any) => {
           if (typeof technology === 'string') {
             return technology.trim();
@@ -170,18 +152,14 @@ export class ExperiencePage implements OnInit {
 
           return (technology?.technologyName || technology?.name || '').trim();
         })
-
         .filter((technology: string) => !!technology);
     }
 
     // String response
     if (typeof technologies === 'string') {
       return technologies
-
         .split(',')
-
         .map((technology: string) => technology.trim())
-
         .filter((technology: string) => !!technology);
     }
 

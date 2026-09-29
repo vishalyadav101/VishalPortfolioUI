@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, shareReplay, catchError, throwError, tap } from 'rxjs';
 
 import { Skill, SkillCreateRequest, SkillUpdateRequest } from '../models/skill.model';
 
@@ -15,13 +15,38 @@ export class SkillService {
   private readonly apiBaseUrl = 'https://vishalportfolioapi.onrender.com';
 
   // ==========================================
+  // SKILLS CACHE
+  // ==========================================
+
+  private skillsCache$?: Observable<Skill[]>;
+
+  // ==========================================
   // GET ALL SKILLS
   // ==========================================
 
   getSkills(): Observable<Skill[]> {
-    return this.http
-      .get<Skill[]>(this.apiUrl)
-      .pipe(map((skills) => skills.map((skill) => this.normalizeSkillUrl(skill))));
+    // Return cached skills if already loaded.
+    if (this.skillsCache$) {
+      return this.skillsCache$;
+    }
+
+    this.skillsCache$ = this.http.get<Skill[]>(this.apiUrl).pipe(
+      map((skills) => skills.map((skill) => this.normalizeSkillUrl(skill))),
+
+      // Keep latest successful result in memory.
+      shareReplay({
+        bufferSize: 1,
+        refCount: true,
+      }),
+
+      // Don't permanently cache an API error.
+      catchError((error) => {
+        this.skillsCache$ = undefined;
+        return throwError(() => error);
+      }),
+    );
+
+    return this.skillsCache$;
   }
 
   // ==========================================
@@ -39,9 +64,14 @@ export class SkillService {
   // ==========================================
 
   createSkill(data: SkillCreateRequest): Observable<Skill> {
-    return this.http
-      .post<Skill>(this.apiUrl, data)
-      .pipe(map((skill) => this.normalizeSkillUrl(skill)));
+    return this.http.post<Skill>(this.apiUrl, data).pipe(
+      map((skill) => this.normalizeSkillUrl(skill)),
+
+      // New skill means public skills cache is outdated.
+      tap(() => {
+        this.clearSkillsCache();
+      }),
+    );
   }
 
   // ==========================================
@@ -49,9 +79,14 @@ export class SkillService {
   // ==========================================
 
   updateSkill(id: number, data: SkillUpdateRequest): Observable<Skill> {
-    return this.http
-      .put<Skill>(`${this.apiUrl}/${id}`, data)
-      .pipe(map((skill) => this.normalizeSkillUrl(skill)));
+    return this.http.put<Skill>(`${this.apiUrl}/${id}`, data).pipe(
+      map((skill) => this.normalizeSkillUrl(skill)),
+
+      // Updated skill means cache is outdated.
+      tap(() => {
+        this.clearSkillsCache();
+      }),
+    );
   }
 
   // ==========================================
@@ -59,7 +94,12 @@ export class SkillService {
   // ==========================================
 
   deleteSkill(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/${id}`).pipe(
+      // Deleted skill means cache is outdated.
+      tap(() => {
+        this.clearSkillsCache();
+      }),
+    );
   }
 
   // ==========================================
@@ -71,9 +111,22 @@ export class SkillService {
 
     formData.append('file', file);
 
-    return this.http
-      .post<Skill>(`${this.apiUrl}/${id}/upload-icon`, formData)
-      .pipe(map((skill) => this.normalizeSkillUrl(skill)));
+    return this.http.post<Skill>(`${this.apiUrl}/${id}/upload-icon`, formData).pipe(
+      map((skill) => this.normalizeSkillUrl(skill)),
+
+      // Icon changed, so cached skill data is outdated.
+      tap(() => {
+        this.clearSkillsCache();
+      }),
+    );
+  }
+
+  // ==========================================
+  // CLEAR SKILLS CACHE
+  // ==========================================
+
+  clearSkillsCache(): void {
+    this.skillsCache$ = undefined;
   }
 
   // ==========================================
