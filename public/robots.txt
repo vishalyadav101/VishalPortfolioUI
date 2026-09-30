@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vishal-yadav-net-developer.onrender.com/sitemap.xml
+Sitemap: https://vishal-yadav-dotnet-developer.vercel.app/sitemap.xml
