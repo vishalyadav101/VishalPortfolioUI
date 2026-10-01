@@ -105,6 +105,12 @@
   line-height: 1;
 }
 
+/* Mobile navigation is hidden on desktop/laptop.
+   It becomes visible only inside the mobile media query below. */
+.mobile-nav {
+  display: none;
+}
+
 .nav-links {
   height: 70px;
 
