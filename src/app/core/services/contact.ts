@@ -30,7 +30,7 @@ export interface ContactUpdateRequest {
 export class ContactService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Contact';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/Contact';
 
   getContacts(): Observable<Contact[]> {
     return this.http.get<Contact[]>(this.apiUrl);

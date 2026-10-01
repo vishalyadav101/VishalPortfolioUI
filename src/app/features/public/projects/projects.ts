@@ -164,7 +164,7 @@ export class Projects implements OnInit {
       return imageUrl;
     }
 
-    return `https://vishalportfolioapi.onrender.com${imageUrl}`;
+    return `https://vishal-yadav-dotnet-developer.somee.com${imageUrl}`;
   }
 
   // =====================================================

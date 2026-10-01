@@ -50,7 +50,7 @@ export interface BlogPostUpdateRequest {
 export class BlogService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/BlogPost';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/BlogPost';
 
   // ==========================================
   // GET ALL

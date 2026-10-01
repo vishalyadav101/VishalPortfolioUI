@@ -169,7 +169,7 @@ export class Skills implements OnInit {
         return iconUrl;
       }
 
-      return `https://vishalportfolioapi.onrender.com${iconUrl}`;
+      return `https://vishal-yadav-dotnet-developer.somee.com${iconUrl}`;
     }
 
     // Simple Icons

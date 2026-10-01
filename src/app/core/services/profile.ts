@@ -10,9 +10,9 @@ import { Profile, ProfileUpdateRequest } from '../models/profile.model';
 export class ProfileService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Profile';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/Profile';
 
-  private readonly apiBaseUrl = 'https://vishalportfolioapi.onrender.com';
+  private readonly apiBaseUrl = 'https://vishal-yadav-dotnet-developer.somee.com';
 
   // ==========================================
   // PROFILE CACHE

@@ -50,7 +50,7 @@ export interface CertificateUpdateRequest {
 export class CertificateService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Certificate';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/Certificate';
 
   // ==========================================
   // GET ALL

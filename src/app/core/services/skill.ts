@@ -10,9 +10,9 @@ import { Skill, SkillCreateRequest, SkillUpdateRequest } from '../models/skill.m
 export class SkillService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Skill';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/Skill';
 
-  private readonly apiBaseUrl = 'https://vishalportfolioapi.onrender.com';
+  private readonly apiBaseUrl = 'https://vishal-yadav-dotnet-developer.somee.com';
 
   // ==========================================
   // SKILLS CACHE

@@ -18,7 +18,7 @@ export interface SkillCategory {
 export class SkillCategoryService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/SkillCategory';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/SkillCategory';
 
   getCategories(): Observable<SkillCategory[]> {
     return this.http.get<SkillCategory[]>(this.apiUrl);

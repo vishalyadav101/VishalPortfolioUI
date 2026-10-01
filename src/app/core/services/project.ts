@@ -10,7 +10,7 @@ import { Project, ProjectCreateRequest, ProjectUpdateRequest } from '../models/p
 export class ProjectService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api/Project';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api/Project';
 
   // ==========================================
   // PROJECTS CACHE

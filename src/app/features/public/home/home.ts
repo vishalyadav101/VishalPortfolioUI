@@ -425,7 +425,7 @@ export class Home implements OnInit {
     }
 
     // Backend relative upload path
-    return `https://vishalportfolioapi.onrender.com${imageUrl}`;
+    return `https://vishal-yadav-dotnet-developer.somee.com${imageUrl}`;
   }
 
   // =====================================================

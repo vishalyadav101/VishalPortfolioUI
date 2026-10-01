@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class DashboardService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'https://vishalportfolioapi.onrender.com/api';
+  private readonly apiUrl = 'https://vishal-yadav-dotnet-developer.somee.com/api';
 
   getProjects(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/Project`);
