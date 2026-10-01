@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, inject } from '@angular/core';
 
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
@@ -22,6 +22,9 @@ export class Layout implements OnInit {
 
   profile: Profile | null = null;
 
+  // Mobile menu state
+  isMobileMenuOpen = false;
+
   ngOnInit(): void {
     this.loadProfile();
   }
@@ -42,5 +45,29 @@ export class Layout implements OnInit {
         this.changeDetector.detectChanges();
       },
     });
+  }
+
+  // Toggle hamburger menu
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  // Close menu after clicking a menu link
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
+  // Close menu when clicking outside mobile navbar
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    // Click navbar ke andar hai
+    if (target.closest('.mobile-nav')) {
+      return;
+    }
+
+    // Navbar ke bahar click hua
+    this.isMobileMenuOpen = false;
   }
 }

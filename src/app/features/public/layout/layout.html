@@ -8,6 +8,10 @@
 
 <nav class="main-navbar">
   <div class="navbar-container">
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
     <a routerLink="/" class="brand">
       <span class="brand-icon"> &lt;/&gt; </span>
 
@@ -22,7 +26,11 @@
       </span>
     </a>
 
-    <div class="nav-links">
+    <!-- =====================================================
+         DESKTOP / LAPTOP NAVIGATION
+    ====================================================== -->
+
+    <div class="nav-links desktop-nav">
       <a
         routerLink="/"
         routerLinkActive="active"
@@ -41,6 +49,83 @@
       <a routerLink="/experience" routerLinkActive="active" class="nav-link"> Experience </a>
 
       <a routerLink="/contact" routerLinkActive="active" class="nav-link"> Contact </a>
+    </div>
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+    ====================================================== -->
+
+    <div class="mobile-nav">
+      <!-- ===================================================
+           MOBILE MAIN LINKS
+           Home / Skills / Projects
+      ==================================================== -->
+
+      <div class="mobile-main-links">
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+          (click)="closeMobileMenu()"
+        >
+          Home
+        </a>
+
+        <a
+          routerLink="/skills"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="closeMobileMenu()"
+        >
+          Skills
+        </a>
+
+        <a
+          routerLink="/projects"
+          routerLinkActive="active"
+          class="nav-link"
+          (click)="closeMobileMenu()"
+        >
+          Projects
+        </a>
+      </div>
+
+      <!-- ===================================================
+           HAMBURGER BUTTON
+      ==================================================== -->
+
+      <button
+        type="button"
+        class="mobile-menu-button"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- ===================================================
+           MOBILE DROPDOWN
+           About / Experience / Contact
+      ==================================================== -->
+
+      @if (isMobileMenuOpen) {
+        <div class="mobile-menu-dropdown">
+          <a routerLink="/about" (click)="closeMobileMenu()"> About </a>
+
+          <a routerLink="/experience" (click)="closeMobileMenu()"> Experience </a>
+
+          <a routerLink="/contact" (click)="closeMobileMenu()"> Contact </a>
+          <!-- ADMIN LOGIN -->
+          <a routerLink="/admin/login" (click)="closeMobileMenu()">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Admin Login
+          </a>
+        </div>
+      }
     </div>
   </div>
 </nav>
@@ -63,7 +148,10 @@
   <div class="footer-glow footer-glow-two"></div>
 
   <div class="footer-container">
-    <!-- BRAND -->
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
     <div class="footer-brand">
       <a routerLink="/" class="footer-brand-link">
         <span class="footer-brand-icon"> &lt;/&gt; </span>
@@ -93,7 +181,10 @@
       </div>
     </div>
 
-    <!-- QUICK LINKS -->
+    <!-- =====================================================
+         QUICK LINKS
+    ====================================================== -->
+
     <div class="footer-column">
       <h3>Quick Links</h3>
 
@@ -127,10 +218,21 @@
           <i class="bi bi-chevron-right"></i>
           Contact
         </a>
+
+        <!-- ADMIN LOGIN -->
+
+        <a routerLink="/admin/login">
+          <i class="bi bi-box-arrow-in-right"></i>
+
+          Admin Login
+        </a>
       </nav>
     </div>
 
-    <!-- EXPLORE -->
+    <!-- =====================================================
+         EXPLORE
+    ====================================================== -->
+
     <div class="footer-column">
       <h3>Explore</h3>
 
@@ -162,9 +264,14 @@
       </div>
     </div>
 
-    <!-- CONNECT -->
+    <!-- =====================================================
+         CONNECT
+    ====================================================== -->
+
     <div class="footer-column footer-connect">
       <h3>Let's Connect</h3>
+
+      <!-- EMAIL -->
 
       @if (profile?.email) {
         <a class="footer-contact-item" [href]="'mailto:' + profile?.email">
@@ -182,6 +289,8 @@
         </a>
       }
 
+      <!-- PHONE -->
+
       @if (profile?.phone) {
         <a class="footer-contact-item" [href]="'tel:' + profile?.phone">
           <span class="footer-contact-icon">
@@ -198,9 +307,15 @@
         </a>
       }
 
+      <!-- SOCIAL TITLE -->
+
       <div class="footer-social-title">Follow me</div>
 
+      <!-- SOCIAL LINKS -->
+
       <div class="footer-socials">
+        <!-- GITHUB -->
+
         @if (profile?.gitHubUrl) {
           <a
             [href]="profile?.gitHubUrl"
@@ -212,6 +327,8 @@
             <i class="bi bi-github"></i>
           </a>
         }
+
+        <!-- LINKEDIN -->
 
         @if (profile?.linkedInUrl) {
           <a
@@ -225,6 +342,8 @@
           </a>
         }
 
+        <!-- EMAIL -->
+
         @if (profile?.email) {
           <a [href]="'mailto:' + profile?.email" aria-label="Email" title="Email">
             <i class="bi bi-envelope-fill"></i>
@@ -234,19 +353,25 @@
     </div>
   </div>
 
-  <!-- FOOTER BOTTOM -->
+  <!-- =====================================================
+       FOOTER BOTTOM
+  ====================================================== -->
+
   <div class="footer-bottom">
     <div class="footer-bottom-container">
       <p>
         <i class="bi bi-code-slash"></i>
 
         © 2026
+
         {{ profile?.fullName || 'Vishal Yadav' }}. All rights reserved.
       </p>
 
       <p class="footer-made-with">
         Designed &amp; Built with
+
         <span> ♥ </span>
+
         using Angular &amp; ASP.NET Core
       </p>
     </div>

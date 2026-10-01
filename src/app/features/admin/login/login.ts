@@ -21,8 +21,8 @@ export class Login {
   errorMessage = '';
 
   loginForm = this.fb.nonNullable.group({
-    email: ['admin@vishalportfolio.com', [Validators.required, Validators.email]],
-    password: ['Admin@12345', [Validators.required, Validators.minLength(6)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   onSubmit(): void {
@@ -42,7 +42,6 @@ export class Login {
 
       error: (error) => {
         this.isLoading = false;
-
         this.errorMessage = error?.error?.message || 'Invalid email or password.';
       },
     });
