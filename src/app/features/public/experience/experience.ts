@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ExperienceService } from '../../../core/services/experience';
@@ -20,6 +20,7 @@ export class ExperiencePage implements OnInit {
   // =====================================================
 
   private readonly experienceService = inject(ExperienceService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   // =====================================================
   // DATA
@@ -58,6 +59,9 @@ export class ExperiencePage implements OnInit {
           .sort((a: Experience, b: Experience) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
         this.isLoading = false;
+
+        // Make sure SSR/hydration updates the UI immediately.
+        this.changeDetectorRef.detectChanges();
       },
 
       // =================================================
@@ -72,6 +76,9 @@ export class ExperiencePage implements OnInit {
         this.errorMessage = 'Unable to load experience details.';
 
         this.isLoading = false;
+
+        // Make sure error state is also rendered immediately.
+        this.changeDetectorRef.detectChanges();
       },
     });
   }
@@ -179,11 +186,17 @@ export class ExperiencePage implements OnInit {
       return null;
     }
 
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl) {
+      return null;
     }
 
-    return `https://${url}`;
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      return trimmedUrl;
+    }
+
+    return `https://${trimmedUrl}`;
   }
 
   // =====================================================
