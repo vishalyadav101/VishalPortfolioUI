@@ -1023,7 +1023,7 @@
   .section-heading > span {
     margin-bottom: 5px;
 
-    font-size: 7px;
+    font-size: 11px;
 
     letter-spacing: 1.1px;
   }
@@ -1327,7 +1327,7 @@
   ======================================================= */
 
   .about-content-section {
-    padding: 7px 0;
+    padding: 20px 0;
   }
 
   .about-content-grid {
