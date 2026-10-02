@@ -27,20 +27,24 @@ export class About implements OnInit {
     this.profileService.getProfile().subscribe({
       next: (response: Profile) => {
         this.profile = response;
-
         this.isLoading = false;
       },
 
       error: (error) => {
         console.error('About Profile API Error:', error);
-
         this.isLoading = false;
       },
     });
   }
 
+  // Home page wali profile image
+  get profileImage(): string | null {
+    return this.profile?.profileImageUrl || null;
+  }
+
+  // About page ka laptop image
   get aboutImage(): string | null {
-    return this.profile?.aboutImageUrl || this.profile?.profileImageUrl || null;
+    return this.profile?.aboutImageUrl || null;
   }
 
   get experienceText(): string {

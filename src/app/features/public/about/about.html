@@ -15,8 +15,7 @@
 
         <p>
           Hello! I'm
-          <strong>
-            {{ profile?.fullName || 'Vishal' }} </strong
+          <strong>{{ profile?.fullName || 'Vishal' }}</strong
           >, a passionate developer who enjoys building modern and useful web applications.
         </p>
 
@@ -28,7 +27,6 @@
         <div class="about-hero-actions">
           <a routerLink="/projects" class="primary-button">
             View My Projects
-
             <i class="bi bi-arrow-right"></i>
           </a>
 
@@ -36,14 +34,13 @@
         </div>
       </div>
 
-      <!-- IMAGE -->
-
+      <!-- PROFILE IMAGE -->
       <div class="about-hero-image-area">
-        <div class="image-background"></div>
+        <div class="profile-image-background"></div>
 
-        @if (aboutImage) {
+        @if (profileImage) {
           <img
-            [src]="aboutImage"
+            [src]="profileImage"
             [alt]="profile?.fullName || 'Profile Photo'"
             class="about-profile-image"
           />
@@ -62,119 +59,117 @@
 
   <section class="about-content-section">
     <div class="about-container">
-      <div class="section-heading">
-        <span> WHO I AM </span>
-
-        <h2>
-          A little bit
-          <strong>about me</strong>
-        </h2>
-      </div>
-
       <div class="about-content-grid">
-        <!-- ABOUT TEXT -->
-
-        <div class="about-text">
-          <p>
-            {{
-              profile?.about ||
-                'I am a developer who enjoys creating clean, practical and user-friendly applications. I like understanding how things work and turning ideas into working software.'
-            }}
-          </p>
-
-          <p>
-            My main interest is full-stack web development. I enjoy working with both frontend and
-            backend technologies and continuously improving my development skills.
-          </p>
-
-          <p>
-            This portfolio represents my learning journey, projects, skills and the experience I
-            gain along the way.
-          </p>
+        <!-- LAPTOP IMAGE -->
+        <div class="about-laptop-area">
+          @if (aboutImage) {
+            <div class="about-laptop-card">
+              <img [src]="aboutImage" alt="About me" class="about-laptop-image" />
+            </div>
+          } @else {
+            <div class="about-laptop-placeholder">
+              <i class="bi bi-laptop"></i>
+            </div>
+          }
         </div>
 
-        <!-- BASIC INFORMATION -->
+        <!-- ABOUT CONTENT -->
+        <div class="about-content-right">
+          <div class="section-heading">
+            <span> WHO I AM </span>
 
-        <div class="about-info">
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-person-fill"></i>
-            </div>
-
-            <div>
-              <span> Name </span>
-
-              <strong>
-                {{ profile?.fullName || 'Vishal' }}
-              </strong>
-            </div>
+            <h2>
+              A little bit
+              <strong>about me</strong>
+            </h2>
           </div>
 
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-geo-alt-fill"></i>
-            </div>
+          <!-- ABOUT TEXT -->
+          <div class="about-text">
+            <p>
+              {{
+                profile?.about ||
+                  'I am a developer who enjoys creating clean, practical and user-friendly applications. I like understanding how things work and turning ideas into working software.'
+              }}
+            </p>
 
-            <div>
-              <span> Location </span>
+            <p>
+              My main interest is full-stack web development. I enjoy working with both frontend and
+              backend technologies and continuously improving my development skills.
+            </p>
 
-              <strong>
-                {{ profile?.location || 'Pune, Maharashtra, India' }}
-              </strong>
-            </div>
+            <p>
+              This portfolio represents my learning journey, projects, skills and the experience I
+              gain along the way.
+            </p>
           </div>
 
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-mortarboard-fill"></i>
+          <!-- BASIC INFORMATION -->
+          <div class="about-info">
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-person-fill"></i>
+              </div>
+
+              <div>
+                <span>Name</span>
+                <strong>{{ profile?.fullName || 'Vishal' }}</strong>
+              </div>
             </div>
 
-            <div>
-              <span> Education </span>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+              </div>
 
-              <strong>
-                {{ profile?.education || 'BCA' }}
-              </strong>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-code-slash"></i>
+              <div>
+                <span>Location</span>
+                <strong>{{ profile?.location || 'Pune, Maharashtra, India' }}</strong>
+              </div>
             </div>
 
-            <div>
-              <span> Focus </span>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-mortarboard-fill"></i>
+              </div>
 
-              <strong> Full Stack Development </strong>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-envelope-fill"></i>
-            </div>
-
-            <div>
-              <span> Email </span>
-
-              <strong>
-                {{ profile?.email || 'Available on Contact page' }}
-              </strong>
-            </div>
-          </div>
-
-          <div class="info-item">
-            <div class="info-icon">
-              <i class="bi bi-briefcase-fill"></i>
+              <div>
+                <span>Education</span>
+                <strong>{{ profile?.education || 'BCA' }}</strong>
+              </div>
             </div>
 
-            <div>
-              <span> Currently </span>
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-code-slash"></i>
+              </div>
 
-              <strong>
-                {{ experienceText }}
-              </strong>
+              <div>
+                <span>Focus</span>
+                <strong>Full Stack Development</strong>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-envelope-fill"></i>
+              </div>
+
+              <div>
+                <span>Email</span>
+                <strong>{{ profile?.email || 'Available on Contact page' }}</strong>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <div class="info-icon">
+                <i class="bi bi-briefcase-fill"></i>
+              </div>
+
+              <div>
+                <span>Currently</span>
+                <strong>{{ experienceText }}</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -273,7 +268,6 @@
       <div class="cta-actions">
         <a routerLink="/projects" class="primary-button">
           Explore Projects
-
           <i class="bi bi-arrow-right"></i>
         </a>
 
