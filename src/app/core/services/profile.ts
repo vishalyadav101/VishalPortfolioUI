@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, shareReplay, tap, catchError, throwError } from 'rxjs';
+import { Observable, map, tap, of } from 'rxjs';
 
 import { Profile, ProfileUpdateRequest } from '../models/profile.model';
 
@@ -14,41 +14,50 @@ export class ProfileService {
 
   private readonly apiBaseUrl = 'https://vishal-yadav-dotnet-developer.somee.com';
 
+  private readonly cacheKey = 'portfolio_profile_cache';
+
   // ==========================================
-  // PROFILE CACHE
+  // MEMORY CACHE
   // ==========================================
 
-  private profileCache$?: Observable<Profile>;
+  private cachedProfile: Profile | null = null;
 
   // ==========================================
   // GET PROFILE
   // ==========================================
 
   getProfile(): Observable<Profile> {
-    // If profile is already cached,
-    // return cached data instead of calling API again.
-    if (this.profileCache$) {
-      return this.profileCache$;
+    // ------------------------------------------
+    // 1. MEMORY CACHE
+    // ------------------------------------------
+
+    if (this.cachedProfile) {
+      return of(this.cachedProfile);
     }
 
-    this.profileCache$ = this.http.get<Profile>(this.apiUrl).pipe(
+    // ------------------------------------------
+    // 2. SESSION STORAGE CACHE
+    // ------------------------------------------
+
+    const storedProfile = this.getStoredProfile();
+
+    if (storedProfile) {
+      this.cachedProfile = storedProfile;
+
+      return of(storedProfile);
+    }
+
+    // ------------------------------------------
+    // 3. API CALL
+    // ------------------------------------------
+
+    return this.http.get<Profile>(this.apiUrl).pipe(
       map((profile) => this.normalizeProfileUrls(profile)),
 
-      // Keep latest successful profile in memory.
-      shareReplay({
-        bufferSize: 1,
-        refCount: true,
-      }),
-
-      // If API fails, don't keep the failed request
-      // permanently inside the cache.
-      catchError((error) => {
-        this.profileCache$ = undefined;
-        return throwError(() => error);
+      tap((profile) => {
+        this.setProfileCache(profile);
       }),
     );
-
-    return this.profileCache$;
   }
 
   // ==========================================
@@ -59,17 +68,8 @@ export class ProfileService {
     return this.http.put<Profile>(this.apiUrl, data).pipe(
       map((profile) => this.normalizeProfileUrls(profile)),
 
-      // Update cache immediately with fresh data.
       tap((profile) => {
-        this.profileCache$ = new Observable<Profile>((subscriber) => {
-          subscriber.next(profile);
-          subscriber.complete();
-        }).pipe(
-          shareReplay({
-            bufferSize: 1,
-            refCount: true,
-          }),
-        );
+        this.setProfileCache(profile);
       }),
     );
   }
@@ -86,7 +86,6 @@ export class ProfileService {
     return this.http.post<Profile>(`${this.apiUrl}/upload-image`, formData).pipe(
       map((profile) => this.normalizeProfileUrls(profile)),
 
-      // Update cache with latest profile.
       tap((profile) => {
         this.setProfileCache(profile);
       }),
@@ -105,7 +104,6 @@ export class ProfileService {
     return this.http.post<Profile>(`${this.apiUrl}/upload-about-image`, formData).pipe(
       map((profile) => this.normalizeProfileUrls(profile)),
 
-      // Update cache with latest profile.
       tap((profile) => {
         this.setProfileCache(profile);
       }),
@@ -124,7 +122,6 @@ export class ProfileService {
     return this.http.post<Profile>(`${this.apiUrl}/upload-resume`, formData).pipe(
       map((profile) => this.normalizeProfileUrls(profile)),
 
-      // Update cache with latest profile.
       tap((profile) => {
         this.setProfileCache(profile);
       }),
@@ -136,15 +133,39 @@ export class ProfileService {
   // ==========================================
 
   private setProfileCache(profile: Profile): void {
-    this.profileCache$ = new Observable<Profile>((subscriber) => {
-      subscriber.next(profile);
-      subscriber.complete();
-    }).pipe(
-      shareReplay({
-        bufferSize: 1,
-        refCount: true,
-      }),
-    );
+    // Memory cache
+    this.cachedProfile = profile;
+
+    // Session storage cache
+    try {
+      sessionStorage.setItem(this.cacheKey, JSON.stringify(profile));
+    } catch (error) {
+      console.warn('Unable to save profile to session storage.', error);
+    }
+  }
+
+  // ==========================================
+  // GET STORED PROFILE
+  // ==========================================
+
+  private getStoredProfile(): Profile | null {
+    try {
+      const storedData = sessionStorage.getItem(this.cacheKey);
+
+      if (!storedData) {
+        return null;
+      }
+
+      const profile = JSON.parse(storedData) as Profile;
+
+      return this.normalizeProfileUrls(profile);
+    } catch (error) {
+      console.warn('Unable to read profile from session storage.', error);
+
+      sessionStorage.removeItem(this.cacheKey);
+
+      return null;
+    }
   }
 
   // ==========================================
@@ -152,7 +173,13 @@ export class ProfileService {
   // ==========================================
 
   clearProfileCache(): void {
-    this.profileCache$ = undefined;
+    this.cachedProfile = null;
+
+    try {
+      sessionStorage.removeItem(this.cacheKey);
+    } catch (error) {
+      console.warn('Unable to clear profile session cache.', error);
+    }
   }
 
   // ==========================================
@@ -172,7 +199,7 @@ export class ProfileService {
   }
 
   // ==========================================
-  // CONVERT RELATIVE URL TO ABSOLUTE URL
+  // CONVERT URL TO ABSOLUTE URL
   // ==========================================
 
   private toAbsoluteUrl(url?: string | null): string | null {
@@ -180,16 +207,23 @@ export class ProfileService {
       return null;
     }
 
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
     // Already absolute URL
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      return trimmedUrl;
     }
 
-    // Relative API file URL
-    if (url.startsWith('/')) {
-      return `${this.apiBaseUrl}${url}`;
+    // Relative URL starting with /
+    if (trimmedUrl.startsWith('/')) {
+      return `${this.apiBaseUrl}${trimmedUrl}`;
     }
 
-    return `${this.apiBaseUrl}/${url}`;
+    // Relative URL without /
+    return `${this.apiBaseUrl}/${trimmedUrl}`;
   }
 }

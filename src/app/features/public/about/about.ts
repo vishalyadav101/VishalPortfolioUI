@@ -19,9 +19,17 @@ export class About implements OnInit {
 
   isLoading = true;
 
+  // ==========================================
+  // COMPONENT INITIALIZATION
+  // ==========================================
+
   ngOnInit(): void {
     this.loadProfile();
   }
+
+  // ==========================================
+  // LOAD PROFILE
+  // ==========================================
 
   private loadProfile(): void {
     this.profileService.getProfile().subscribe({
@@ -32,20 +40,56 @@ export class About implements OnInit {
 
       error: (error) => {
         console.error('About Profile API Error:', error);
+
+        this.profile = null;
         this.isLoading = false;
       },
     });
   }
 
-  // Home page wali profile image
+  // ==========================================
+  // PROFILE IMAGE
+  // ==========================================
+
   get profileImage(): string | null {
-    return this.profile?.profileImageUrl || null;
+    const imageUrl = this.profile?.profileImageUrl;
+
+    if (!imageUrl) {
+      return null;
+    }
+
+    const trimmedUrl = imageUrl.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
+    return trimmedUrl;
   }
 
-  // About page ka laptop image
+  // ==========================================
+  // ABOUT IMAGE
+  // ==========================================
+
   get aboutImage(): string | null {
-    return this.profile?.aboutImageUrl || null;
+    const imageUrl = this.profile?.aboutImageUrl;
+
+    if (!imageUrl) {
+      return null;
+    }
+
+    const trimmedUrl = imageUrl.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
+    return trimmedUrl;
   }
+
+  // ==========================================
+  // EXPERIENCE / AVAILABILITY
+  // ==========================================
 
   get experienceText(): string {
     if (this.profile?.availabilityStatus) {

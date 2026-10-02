@@ -130,10 +130,11 @@
 
           <div class="hero-dots dots-two"></div>
 
-          @if (profile?.profileImageUrl?.trim()) {
+          <!-- PROFILE IMAGE -->
+          @if (getProfileImageUrl(profile?.profileImageUrl)) {
             <img
               class="profile-image"
-              [src]="profile?.profileImageUrl"
+              [src]="getProfileImageUrl(profile?.profileImageUrl)"
               [alt]="profile?.fullName ?? 'Vishal Yadav'"
             />
           }
@@ -314,10 +315,11 @@
           </div>
 
           <div class="about-visual">
-            @if (profile?.aboutImageUrl?.trim()) {
+            <!-- ABOUT / LAPTOP IMAGE -->
+            @if (getAboutImageUrl(profile?.aboutImageUrl)) {
               <img
                 class="about-main-image"
-                [src]="profile?.aboutImageUrl"
+                [src]="getAboutImageUrl(profile?.aboutImageUrl)"
                 [alt]="profile?.fullName ?? 'About Me'"
                 loading="lazy"
               />

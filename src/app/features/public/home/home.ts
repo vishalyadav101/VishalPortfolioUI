@@ -115,7 +115,6 @@ export class Home implements OnInit {
     this.projectService.getProjects().subscribe({
       next: (response: Project[]) => {
         this.projects = (response || [])
-
           // Only active projects
           .filter((project: Project) => project.isActive !== false)
 
@@ -145,9 +144,7 @@ export class Home implements OnInit {
     this.skillService.getSkills().subscribe({
       next: (response: Skill[]) => {
         this.skills = (response || [])
-
           .filter((skill: Skill) => skill.isActive !== false)
-
           .sort((a: Skill, b: Skill) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
         skillsLoaded = true;
@@ -173,9 +170,7 @@ export class Home implements OnInit {
     this.experienceService.getExperiences().subscribe({
       next: (response: Experience[]) => {
         this.experiences = (response || [])
-
           .filter((experience: Experience) => experience.isActive !== false)
-
           .sort((a: Experience, b: Experience) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 
         experiencesLoaded = true;
@@ -235,11 +230,8 @@ export class Home implements OnInit {
     const codeNote = this.profile?.codeNote?.trim() || 'Code / Build / Grow / Repeat';
 
     return codeNote
-
       .split('/')
-
       .map((item: string) => item.trim())
-
       .filter((item: string) => !!item);
   }
 
@@ -400,14 +392,63 @@ export class Home implements OnInit {
     }
 
     return [...project.technologies]
-
       .filter(
         (technology) => technology && technology.isActive !== false && !!technology.technologyName,
       )
-
       .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
-
       .map((technology) => technology.technologyName);
+  }
+
+  // =====================================================
+  // PROFILE IMAGE URL
+  // =====================================================
+
+  getProfileImageUrl(imageUrl: string | null | undefined): string | null {
+    if (!imageUrl) {
+      return null;
+    }
+
+    const trimmedUrl = imageUrl.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
+    // Already full URL
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      return trimmedUrl;
+    }
+
+    // Backend relative upload path
+    const imagePath = trimmedUrl.startsWith('/') ? trimmedUrl : `/${trimmedUrl}`;
+
+    return `https://vishal-yadav-dotnet-developer.somee.com${imagePath}`;
+  }
+
+  // =====================================================
+  // ABOUT IMAGE URL
+  // =====================================================
+
+  getAboutImageUrl(imageUrl: string | null | undefined): string | null {
+    if (!imageUrl) {
+      return null;
+    }
+
+    const trimmedUrl = imageUrl.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
+    // Already full URL
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      return trimmedUrl;
+    }
+
+    // Backend relative upload path
+    const imagePath = trimmedUrl.startsWith('/') ? trimmedUrl : `/${trimmedUrl}`;
+
+    return `https://vishal-yadav-dotnet-developer.somee.com${imagePath}`;
   }
 
   // =====================================================
@@ -419,13 +460,21 @@ export class Home implements OnInit {
       return null;
     }
 
+    const trimmedUrl = imageUrl.trim();
+
+    if (!trimmedUrl) {
+      return null;
+    }
+
     // Already full URL
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      return trimmedUrl;
     }
 
     // Backend relative upload path
-    return `https://vishal-yadav-dotnet-developer.somee.com${imageUrl}`;
+    const imagePath = trimmedUrl.startsWith('/') ? trimmedUrl : `/${trimmedUrl}`;
+
+    return `https://vishal-yadav-dotnet-developer.somee.com${imagePath}`;
   }
 
   // =====================================================
